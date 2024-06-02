@@ -1,0 +1,8 @@
+.env
+
+Backend/node_modules/
+package-lock.json
+Backend/dist/
+Backend/build/
+Backend/mongo/
+Backend/coverage/
