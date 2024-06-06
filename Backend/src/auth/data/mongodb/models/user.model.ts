@@ -18,6 +18,10 @@ const userSchema = new Schema({
   img: {
     type: String,
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 export const UserModel = mongoose.model('User', userSchema);

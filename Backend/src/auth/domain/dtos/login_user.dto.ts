@@ -1,21 +1,19 @@
 import { Validators } from "../../../config";
 
-export class RegisterUserDto {
+
+
+export class LoginUserDto {
   private constructor(
-    public name: string,
     public email: string,
     public password: string,
-    public verify: boolean = false,
-    public img?: string,
   ) {}
 
-  static create(object: {[key: string]: any}): [string?, RegisterUserDto?] {
-    const { name, email, password, ...extraKeys } = object;
+  static create(object: {[key: string]: any}): [string?, LoginUserDto?] {
+    const { email, password, ...extraKeys } = object;
 
     const extraKeysArray = Object.keys(extraKeys);
     if (extraKeysArray.length > 0) return [`Invalid keys: ${extraKeysArray.join(', ')}`];
     
-    if (!name) return ['name is required'];
     if (!email) return ['email is required'];
     if (!Validators.email.test(email)) return ['email is invalid'];
     if (!password) return ['password is required'];
@@ -23,7 +21,7 @@ export class RegisterUserDto {
 
     return [
       undefined,
-      new RegisterUserDto(name, email.toLowerCase(), password)
+      new LoginUserDto(email.toLowerCase(), password)
     ]
   }
 }

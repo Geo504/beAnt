@@ -4,6 +4,7 @@ export class UserEntity {
     public name: string,
     public email: string,
     public password: string,
+    public verify: boolean,
     public img?: string,
   ) {}
 }

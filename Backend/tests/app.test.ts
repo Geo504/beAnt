@@ -1,8 +1,8 @@
 
 
 
-describe('App', () => {
-  test('should return "Hello World!"', () => {
+describe('Server App', () => {
+  test('should create SeverApp instance', () => {
     expect(true).toBe(true);
   });
 });

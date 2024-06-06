@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import { AuthController } from "./controller";
 import { AuthDataSourceImpl, AuthRepositoryImpl } from "../infrastructure";
+import { AuthMiddleware } from "./middlewares/auth.middleware";
 
 
 
@@ -17,6 +18,8 @@ export class AuthRoutes {
 
     router.post('/register', controller.registerUser);
     router.post('/login', controller.loginUser);
+
+    router.get('/users', AuthMiddleware.validateJWT, controller.getUser);
 
     return router;
   }
