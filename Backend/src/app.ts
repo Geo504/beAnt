@@ -1,7 +1,7 @@
 import { envs } from "./config";
-import { MongoDB } from "./auth/data/mongodb";
-import { AppRoutes } from "./core/presentation/routes";
-import { Server } from "./core/presentation/server";
+import { MongoDB } from "./data/mongodb";
+import { AppRoutes } from "./core/routes";
+import { Server } from "./core/server";
 
 (() => {
   main();

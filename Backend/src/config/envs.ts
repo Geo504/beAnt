@@ -7,6 +7,8 @@ export const envs = {
   
   MONGO_URL: get('MONGO_URL').required().asString(),
   MONGO_DB_NAME: get('MONGO_DB_NAME').required().asString(),
+  MONGO_USER: get('MONGO_USER').required().asString(),
+  MONGO_PASSWORD: get('MONGO_PASSWORD').required().asString(),
 
   EMAIL_SERVICE: get('EMAIL_SERVICE').required().asString(),
   EMAIL_NAME: get('EMAIL_NAME').required().asEmailString(),

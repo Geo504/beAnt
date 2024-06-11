@@ -9,6 +9,8 @@ PORT=5000
 
 MONGO_URL=mongodb://user:password@host:port
 MONGO_DB_NAME=db_name
+MONGO_USER=user_name
+MONGO_PASSWORD=password
 
 EMAIL_SERVICE=gmail
 EMAIL_NAME=mail@mail.com

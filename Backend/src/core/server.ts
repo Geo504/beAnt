@@ -18,17 +18,6 @@ export class Server {
   }
 
   async start() {
-    // TODO: Remove this test and implement the EmailService
-    // const emailService = new EmailService();
-    // emailService.sendEmail({
-    //   to: "geovannyvalladares94@gmail.com",
-    //   subject: "Test",
-    //   htmlBody: `
-    //     <h1>Test</h1>
-    //     <p>Lorem</p>
-    //   `,
-    // });
-
     // Middlewares
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true })); //for parsing x-www-form-urlencoded

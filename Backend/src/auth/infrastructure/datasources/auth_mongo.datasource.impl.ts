@@ -1,5 +1,5 @@
 import { BcryptAdapter } from "../../../config";
-import { UserModel } from "../../data/mongodb";
+import { UserModel } from "../../../data/mongodb";
 
 import { AuthDataSource, CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../domain";
 import { UserMapper } from "../mappers/user.mapper";

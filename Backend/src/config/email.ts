@@ -27,7 +27,6 @@ export class EmailService {
 
     try {
       await this.transporter.sendMail({
-        from: 'BeAnt',
         to: to,
         subject: subject,
         html: htmlBody,

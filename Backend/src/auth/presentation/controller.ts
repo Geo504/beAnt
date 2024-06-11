@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserModel } from "../data/mongodb";
+import { UserModel } from "../../data/mongodb";
 
 import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto } from "../domain";
 
