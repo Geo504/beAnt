@@ -1,5 +1,6 @@
-import nodemailer from "nodemailer";
-import { envs } from "./envs";
+import nodemailer, { Transporter } from "nodemailer";
+
+
 
 interface SendEmailOptions {
   to: string | string[];
@@ -12,13 +13,22 @@ interface SendEmailOptions {
 
 export class EmailService {
 
-  private transporter = nodemailer.createTransport({
-    service: envs.EMAIL_SERVICE,
-    auth: {
-      user: envs.EMAIL_NAME,
-      pass: envs.EMAIL_PASSWORD,
-    },
-  });
+  private transporter: Transporter;
+
+  constructor(
+    emailService: string,
+    emailName: string,
+    emailPassword: string,
+  ){
+    this.transporter = nodemailer.createTransport({
+      service: emailService,
+      auth: {
+        user: emailName,
+        pass: emailPassword,
+      },
+    });
+  }
+
 
 
   async sendEmail(options: SendEmailOptions): Promise<boolean> {

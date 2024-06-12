@@ -4,6 +4,7 @@ import { get } from 'env-var';
 
 export const envs = {
   PORT: get('PORT').default(5000).asPortNumber(),
+  BACKEND_URL: get('BACKEND_URL').required().asUrlString(),
   
   MONGO_URL: get('MONGO_URL').required().asString(),
   MONGO_DB_NAME: get('MONGO_DB_NAME').required().asString(),

@@ -1,9 +1,10 @@
-import { compareSync, hashSync } from 'bcryptjs';
+import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 
 
 export class BcryptAdapter {
   static hash(password: string): string {
-    return hashSync(password);
+    const salt = genSaltSync();
+    return hashSync(password, salt);
   }
 
   static compare(password: string, hash: string): boolean {

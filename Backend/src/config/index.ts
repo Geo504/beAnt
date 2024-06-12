@@ -1,5 +1,7 @@
-export * from './envs'
+export * from './adapter/envs'
+export * from './adapter/bcrypt'
+export * from './adapter/jwt'
+
 export * from './validators'
-export * from './bcrypt'
-export * from './jwt'
-export * from './email'
+
+export * from './service/email'

@@ -1,5 +1,5 @@
 import { envs } from "./config";
-import { MongoDB } from "./data/mongodb";
+import { MongoDB } from "./data";
 import { AppRoutes } from "./core/routes";
 import { Server } from "./core/server";
 
@@ -14,8 +14,10 @@ async function main() {
     dbName: envs.MONGO_DB_NAME,
   })
 
-  new Server({
+  const server = new Server({
     port: envs.PORT,
     routes: AppRoutes.routes,
-  }).start();
+  });
+
+  server.start();
 }

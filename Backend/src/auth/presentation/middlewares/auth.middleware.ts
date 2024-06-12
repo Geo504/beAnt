@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import { JwtAdapter } from "../../../config";
-import { UserModel } from "../../../data/mongodb";
+import { UserModel } from "../../../data";
 
 
 

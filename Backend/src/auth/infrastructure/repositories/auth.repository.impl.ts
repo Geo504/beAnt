@@ -16,4 +16,8 @@ export class AuthRepositoryImpl implements AuthRepository {
     return this.authDataSource.loginUser(loginUserDto);
   }
 
+  validateEmail(email: string): Promise<boolean> {
+    return this.authDataSource.validateEmail(email);
+  }
+
 }

@@ -5,8 +5,6 @@ export class RegisterUserDto {
     public name: string,
     public email: string,
     public password: string,
-    public verify: boolean = false,
-    public img?: string,
   ) {}
 
   static create(object: {[key: string]: any}): [string?, RegisterUserDto?] {
@@ -23,7 +21,7 @@ export class RegisterUserDto {
 
     return [
       undefined,
-      new RegisterUserDto(name, email.toLowerCase(), password)
+      new RegisterUserDto(name, email, password)
     ]
   }
 }

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { UserModel } from "../../data/mongodb";
+import { UserModel } from "../../data";
 
-import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto } from "../domain";
+import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail } from "../domain";
 
 
 
@@ -37,6 +37,16 @@ export class AuthController {
     return new LoginUser(this.authRepository)
       .execute(loginUserDto!)
       .then((data) => res.json(data))
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+  validateEmail = (req: Request, res: Response) => {
+    const { token } = req.params;
+
+    return new ValidateEmail(this.authRepository)
+      .execute(token)
+      .then(() => res.json({ message: 'Email validated' }))
       .catch((error) => this.handleError(error, res));
   }
 

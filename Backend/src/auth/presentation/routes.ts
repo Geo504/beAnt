@@ -16,11 +16,17 @@ export class AuthRoutes {
 
     const controller = new AuthController(authRepository);
 
+
+
     router.post('/register', controller.registerUser);
     router.post('/login', controller.loginUser);
 
+    router.get('/validate-email/:token', controller.validateEmail);
+
     router.get('/users', AuthMiddleware.validateJWT, controller.getUser);
 
+
+    
     return router;
   }
 }
