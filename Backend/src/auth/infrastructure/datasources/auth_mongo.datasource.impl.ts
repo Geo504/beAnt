@@ -54,6 +54,9 @@ export class AuthDataSourceImpl implements AuthDataSource {
       const user = await UserModel.findOne({ email });
       if (!user) throw CustomError.badRequest('Credentials are wrong');
 
+      // verify email
+      if (!user.verifyEmail) throw CustomError.unauthorized('Email not verified');
+
       //verify password
       const isPasswordValid = this.comparePassword(password, user.password);
       if (!isPasswordValid) throw CustomError.badRequest('Credentials are wrong');

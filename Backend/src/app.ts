@@ -15,6 +15,7 @@ async function main() {
   })
 
   const server = new Server({
+    corsURL: envs.FRONTEND_URL,
     port: envs.PORT,
     routes: AppRoutes.routes,
   });

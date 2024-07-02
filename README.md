@@ -23,3 +23,10 @@ JWT_SEED=secret_jwt_seed
 4. Execute on terminal for install dependencies: ```npm install```
 3. Execute on terminal for database: ```docker-compose up -d```
 5. Execute on terminal for run the backend: ```npm run dev```
+
+
+
+
+# dev frontend
+1. Open a terminal in path: ```./Frontend ```
+2. Run the development server: ``` npm run dev ```
