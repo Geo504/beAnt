@@ -1,8 +1,8 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { LogOutSvg } from "../icons";
 import { DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut } from "../ui/dropdown-menu";
+import { LogOutSvg } from "../icons";
 
 
 

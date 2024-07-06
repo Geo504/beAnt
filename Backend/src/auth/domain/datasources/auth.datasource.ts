@@ -9,4 +9,6 @@ export abstract class AuthDataSource {
   abstract loginUser(loginUserDto: LoginUserDto): Promise<UserEntity>;
 
   abstract validateEmail(email: string): Promise<boolean>;
+
+  abstract getUser(id: string): Promise<UserEntity>;
 }

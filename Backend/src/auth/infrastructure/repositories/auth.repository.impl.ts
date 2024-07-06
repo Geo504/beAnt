@@ -20,4 +20,8 @@ export class AuthRepositoryImpl implements AuthRepository {
     return this.authDataSource.validateEmail(email);
   }
 
+  getUser(userId: string): Promise<UserEntity> {
+    return this.authDataSource.getUser(userId);
+  }
+
 }

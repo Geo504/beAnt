@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { useRouter } from 'next/navigation';
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 import { toast } from "sonner";
 
 import { LoginResponse } from "@/src/services/authData";
+
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import {
@@ -71,7 +72,7 @@ export default function LoginForm( { loginUser }: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-left">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 text-left">
         <FormField
           control={form.control}
           name="email"
@@ -110,7 +111,7 @@ export default function LoginForm( { loginUser }: Props) {
           )}
         />
 
-        <Button size={"full"} type="submit" disabled={loading}>
+        <Button size={"full"} type="submit" disabled={loading} className="mt-10">
         {loading ? 
             <>
             <LogoSvg className="animate-pulse mr-1" />Loading...

@@ -94,4 +94,23 @@ export class AuthDataSourceImpl implements AuthDataSource {
       throw CustomError.internalServer();
     }
   }
+
+
+
+  async getUser(userId: string): Promise<UserEntity> {
+    try {
+      //verify user exists
+      const user = await UserModel.findById(userId);
+      if (!user) throw CustomError.notFound('User not found');
+
+      return UserEntity.fromObject(user);
+
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      console.log(error);
+      throw CustomError.internalServer();
+    }
+  }
 }

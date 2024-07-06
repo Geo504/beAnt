@@ -2,6 +2,6 @@
 
 export default function HomePage() {
   return (
-    <div>Welcome to Home</div>
+    <h1 className="text-2xl font-semibold mt-1 text-primary">Home</h1>
   )
 }

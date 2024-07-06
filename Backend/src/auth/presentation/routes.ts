@@ -20,13 +20,10 @@ export class AuthRoutes {
 
     router.post('/register', controller.registerUser);
     router.post('/login', controller.loginUser);
-    router.post('/logout', AuthMiddleware.validateJWT, controller.logoutUser);
 
     router.get('/validate-email/:token', controller.validateEmail);
 
-    router.get('/users', AuthMiddleware.validateJWT, controller.getUser);
-
-
+    router.get('/user', AuthMiddleware.validateJWT, controller.getUser);
 
     
     return router;

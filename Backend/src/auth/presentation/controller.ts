@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { UserModel } from "../../data";
 import { envs } from "../../config";
 
-import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail } from "../domain";
+import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail, GetUser } from "../domain";
 
 
 
@@ -52,14 +51,7 @@ export class AuthController {
 
 
 
-  logoutUser = (_req: Request, res: Response) => {
-    res.clearCookie('access_token');
-    res.status(204).send();
-  }
-
-
-
-  validateEmail = (req: Request, res: Response) => {
+  validateEmail = async (req: Request, res: Response) => {
     const { token } = req.params;
 
     return new ValidateEmail(this.authRepository)
@@ -70,10 +62,12 @@ export class AuthController {
 
 
 
-  getUser = (req: Request, res: Response) => {
-    // TODO: Take out dependency on UserModel.
-    UserModel.findById(req.body.user)
-      .then(user => res.json({ user }))
-      .catch(() => res.status(500).json({ error: 'Internal server error' }));
+  getUser = async (req: Request, res: Response) => {
+    const userId = req.user!;
+
+    return new GetUser(this.authRepository)
+      .execute(userId)
+      .then((data) => res.json(data))
+      .catch((error) => this.handleError(error, res));
   }
 }

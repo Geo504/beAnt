@@ -22,6 +22,20 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+
+  accounts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Account'
+  }],
 });
+
+userSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function( _doc, ret, _options ) {
+    delete ret._id;
+    delete ret.password;
+  },
+})
 
 export const UserModel = mongoose.model('User', userSchema);

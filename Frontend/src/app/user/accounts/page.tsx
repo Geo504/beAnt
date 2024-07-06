@@ -3,6 +3,6 @@
 
 export default function AccountsPage() {
   return (
-    <div>Welcome to your accounts</div>
+    <h1 className="text-2xl font-semibold mt-1 text-primary">Accounts</h1>
   )
 }

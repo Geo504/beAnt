@@ -3,10 +3,7 @@
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 
-interface ErrorResponse {
-  errorMessage: string;
-  errorDescription?: string;
-}
+import { ErrorResponse, User } from "../interfaces";
 
 
 
@@ -35,11 +32,7 @@ export async function registerUser(data: {name: string, email: string, password:
 
 
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-}
+
 export type LoginResponse = {user: User} | ErrorResponse;
 
 export async function loginUser(data: {email: string, password: string}): Promise< LoginResponse > {
@@ -70,7 +63,6 @@ export async function loginUser(data: {email: string, password: string}): Promis
   const accessToken = cookieHeader.match(/access_token=([^;]+)/)?.[1];
   if (!accessToken) throw new Error("Access token not found in the response.");
   const tokenDecoded = jwtDecode(accessToken);
-  console.log(tokenDecoded);
 
   const cookieOptions = {
     path: '/',
@@ -89,15 +81,21 @@ export async function loginUser(data: {email: string, password: string}): Promis
 
 
 export async function logoutUser(): Promise<boolean> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`, {
-    method: "POST",
+  cookies().delete('access_token');
+  return true;
+}
+
+
+
+export async function getUser(): Promise<User | null> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user`, {
+    method: "GET",
     headers: {Cookie: cookies().toString()},
   });
 
   if (!res.ok) {
-    throw new Error("Error logging out.");
+    return null;
   }
 
-  cookies().delete('access_token');
-  return true;
+  return res.json();
 }

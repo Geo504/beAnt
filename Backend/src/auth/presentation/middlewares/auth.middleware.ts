@@ -1,7 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 
-import { JwtAdapter } from "../../../config";
+import { JwtAdapter, Validators } from "../../../config";
 import { UserModel } from "../../../data";
+
+// TODO: Move this to a global file
+declare global {
+  namespace Express {
+    interface Request {
+      user?: string;
+    }
+  }
+}
 
 
 
@@ -21,8 +30,11 @@ export class AuthMiddleware {
 
       const user = await UserModel.findById(payload.id);
       if (!user) return res.status(401).json({ error: 'Unauthorize' });
+      if (!user.verifyEmail) return res.status(401).json({ error: 'Unauthorize' });
+      if (!Validators.isMongoID(user.id)) return res.status(401).json({ error: 'Unauthorize' });
 
-      req.body.user = user;
+      // req.user = UserEntity.fromObject(user);
+      req.user = user.id
 
       return next();
 
