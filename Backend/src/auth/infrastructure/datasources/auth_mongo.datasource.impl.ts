@@ -1,5 +1,5 @@
 import { BcryptAdapter } from "../../../config";
-import { UserModel } from "../../../data";
+import { AccountModel, TransactionModel, UserModel } from "../../../data";
 
 import { AuthDataSource, CustomError, LoginUserDto, RegisterUserDto, UpdateUserDto, UserEntity } from "../../domain";
 
@@ -126,6 +126,37 @@ export class AuthDataSourceImpl implements AuthDataSource {
       if (!user) throw CustomError.notFound('User not found');
 
       return UserEntity.fromObject(user);
+
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      console.log(error);
+      throw CustomError.internalServer();
+    }
+  }
+
+
+
+  async deleteUser(userId: string): Promise<boolean> {
+    try {
+      const accounts = await AccountModel.find({ users: userId }).select('_id');
+
+      // Delete user accounts & transactions
+      if (accounts.length > 0) {
+        const accountIds = accounts.map(account => account._id);
+
+        const deleteTransactions = TransactionModel.deleteMany({ account: { $in: accountIds } });
+        const deleteAccounts = AccountModel.deleteMany({ _id: { $in: accountIds } });
+        
+        await Promise.all([deleteTransactions, deleteAccounts]);
+      }
+
+
+      const user = await UserModel.findByIdAndDelete(userId);
+      if (!user) throw CustomError.notFound('User not found');
+
+      return true;
 
     } catch (error) {
       if (error instanceof CustomError) {

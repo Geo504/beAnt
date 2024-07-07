@@ -28,4 +28,8 @@ export class AuthRepositoryImpl implements AuthRepository {
     return this.authDataSource.updateUser(updateUserDto, userId);
   }
 
+  deleteUser(userId: string): Promise<boolean> {
+    return this.authDataSource.deleteUser(userId);
+  }
+
 }

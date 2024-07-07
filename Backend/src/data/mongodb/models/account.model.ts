@@ -1,4 +1,5 @@
 import mongoose, {Schema} from "mongoose";
+// import { TransactionModel } from "./transaction.model";
 
 
 const accountSchema = new Schema({
@@ -39,6 +40,8 @@ accountSchema.set('toJSON', {
   transform: function( _doc, ret, _options ) {
     delete ret._id;
   },
-})
+});
+
+
 
 export const AccountModel = mongoose.model('Account', accountSchema);

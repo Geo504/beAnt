@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { envs } from "../../config";
 
-import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail, GetUser, UpdateUser, UpdateUserDto } from "../domain";
+import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail, GetUser, UpdateUser, UpdateUserDto, DeleteUser } from "../domain";
 
 
 
@@ -82,6 +82,17 @@ export class AuthController {
     return new UpdateUser(this.authRepository)
       .execute(updateUserDto!, userId)
       .then((data) => res.json(data))
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+
+  deleteUser = async (req: Request, res: Response) => {
+    const userId = req.user!;
+
+    return new DeleteUser(this.authRepository)
+      .execute(userId)
+      .then(() => res.status(204).send())
       .catch((error) => this.handleError(error, res));
   }
 }

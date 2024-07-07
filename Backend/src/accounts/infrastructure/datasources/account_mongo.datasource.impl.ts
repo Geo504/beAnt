@@ -22,7 +22,7 @@ export class AccountDatasourceImpl implements AccountDataSource {
         balance: balance,
         favorite: favorite,
         currency: currency,
-        user: userId
+        users: userId
       });
   
       await account.save();

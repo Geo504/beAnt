@@ -16,4 +16,6 @@ export abstract class AuthDataSource {
   abstract getUser(id: string): Promise<UserEntity>;
 
   abstract updateUser(updateUserDto: UpdateUserDto, id: string): Promise<UserEntity>;
+
+  abstract deleteUser(id: string): Promise<boolean>;
 }

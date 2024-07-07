@@ -16,4 +16,6 @@ export abstract class AuthRepository {
   abstract getUser(userId: string): Promise<UserEntity>;
 
   abstract updateUser(updateUserDto: UpdateUserDto, id: string): Promise<UserEntity>;
+
+  abstract deleteUser(userId: string): Promise<boolean>;
 }
