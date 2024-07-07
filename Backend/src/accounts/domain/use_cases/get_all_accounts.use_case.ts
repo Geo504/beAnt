@@ -29,7 +29,7 @@ export class GetAllAccounts implements GetAllAccountsUseCase {
       balance: account.balance,
       favorite: account.favorite,
       currency: account.currency,
-      users: account.user,
+      users: account.users,
     }));
   }
 }

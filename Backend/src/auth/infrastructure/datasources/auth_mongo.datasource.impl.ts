@@ -1,7 +1,7 @@
 import { BcryptAdapter } from "../../../config";
 import { UserModel } from "../../../data";
 
-import { AuthDataSource, CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../domain";
+import { AuthDataSource, CustomError, LoginUserDto, RegisterUserDto, UpdateUserDto, UserEntity } from "../../domain";
 
 
 
@@ -101,6 +101,28 @@ export class AuthDataSourceImpl implements AuthDataSource {
     try {
       //verify user exists
       const user = await UserModel.findById(userId);
+      if (!user) throw CustomError.notFound('User not found');
+
+      return UserEntity.fromObject(user);
+
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      console.log(error);
+      throw CustomError.internalServer();
+    }
+  }
+
+
+
+  async updateUser(updateUserDto: UpdateUserDto, userId: string): Promise<UserEntity> {
+    try {
+      const user = await UserModel.findByIdAndUpdate(
+        userId, 
+        { $set: { name: updateUserDto.name } },
+        { new: true }
+      );
       if (!user) throw CustomError.notFound('User not found');
 
       return UserEntity.fromObject(user);

@@ -24,6 +24,7 @@ export class AuthRoutes {
     router.get('/validate-email/:token', controller.validateEmail);
 
     router.get('/user', AuthMiddleware.validateJWT, controller.getUser);
+    router.put('/user', AuthMiddleware.validateJWT, controller.updateUser);
 
     
     return router;

@@ -31,7 +31,7 @@ const transactionSchema = new Schema({
     default: 'pending',
     enum: ['pending', 'send', 'paid', 'rejected']
   },
-  balance_account: {
+  balanceAccount: {
     type: Number,
     required: [true, 'Balance account is required'],
   },
@@ -39,7 +39,7 @@ const transactionSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'User is required']
+    required: [true, 'User transaction is required']
   },
   account: {
     type: Schema.Types.ObjectId,
@@ -47,5 +47,13 @@ const transactionSchema = new Schema({
     required: [true, 'Account is required']
   }
 });
+
+transactionSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function( _doc, ret, _options ) {
+    delete ret._id;
+  },
+})
 
 export const TransactionModel = mongoose.model('Transaction', transactionSchema);

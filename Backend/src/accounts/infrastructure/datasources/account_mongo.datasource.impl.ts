@@ -1,4 +1,4 @@
-import { AccountModel } from "../../../data";
+import { AccountModel, UserModel } from "../../../data";
 
 import { CustomError } from "../../../auth/domain";
 import { AccountDataSource, AccountEntity, CreateAccountDto } from "../../domain";
@@ -26,6 +26,12 @@ export class AccountDatasourceImpl implements AccountDataSource {
       });
   
       await account.save();
+
+      await UserModel.findByIdAndUpdate(
+        userId,
+        { $push: { accounts: account._id } },
+        { new: true, safe: true, upsert: false }
+      );
   
       return AccountEntity.fromObject(account);
 
@@ -42,8 +48,8 @@ export class AccountDatasourceImpl implements AccountDataSource {
 
   async getAllAccounts(userId: string): Promise<AccountEntity[]> {
     try {
-      const accounts = await AccountModel.find({ user: userId })
-        .populate('user', 'name email');
+      const accounts = await AccountModel.find({ users: userId })
+        .populate('users', 'name email');
 
       return accounts.map(account => AccountEntity.fromObject(account));
 

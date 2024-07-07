@@ -22,15 +22,23 @@ const accountSchema = new Schema({
     enum: ['€', '$', '£']
   },
 
-  user: [{
+  users: [{
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'User is required']
+    required: [true, 'Users is required']
   }],
   transactions: [{
     type: Schema.Types.ObjectId,
     ref: 'Transaction'
   }],
 });
+
+accountSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function( _doc, ret, _options ) {
+    delete ret._id;
+  },
+})
 
 export const AccountModel = mongoose.model('Account', accountSchema);

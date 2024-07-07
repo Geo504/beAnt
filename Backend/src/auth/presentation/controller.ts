@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { envs } from "../../config";
 
-import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail, GetUser } from "../domain";
+import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail, GetUser, UpdateUser, UpdateUserDto } from "../domain";
 
 
 
@@ -67,6 +67,20 @@ export class AuthController {
 
     return new GetUser(this.authRepository)
       .execute(userId)
+      .then((data) => res.json(data))
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+
+  updateUser = async (req: Request, res: Response) => {
+    const userId = req.user!;
+
+    const [error, updateUserDto] = UpdateUserDto.create(req.body);
+    if (error) return res.status(400).json({ error });
+
+    return new UpdateUser(this.authRepository)
+      .execute(updateUserDto!, userId)
       .then((data) => res.json(data))
       .catch((error) => this.handleError(error, res));
   }

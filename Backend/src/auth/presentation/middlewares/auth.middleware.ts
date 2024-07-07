@@ -33,7 +33,6 @@ export class AuthMiddleware {
       if (!user.verifyEmail) return res.status(401).json({ error: 'Unauthorize' });
       if (!Validators.isMongoID(user.id)) return res.status(401).json({ error: 'Unauthorize' });
 
-      // req.user = UserEntity.fromObject(user);
       req.user = user.id
 
       return next();

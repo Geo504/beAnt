@@ -32,7 +32,7 @@ export class AccountController {
 
 
 
-  getAllAccounts = (req: Request, res: Response) => {
+  getAllAccounts = async (req: Request, res: Response) => {
     const userId = req.user!;
 
     return new GetAllAccounts(this.accountRepository)

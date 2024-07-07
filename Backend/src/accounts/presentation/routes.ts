@@ -1,8 +1,9 @@
 import { Router } from "express";
 
-import { AccountController } from "./controller";
 import { AuthMiddleware } from "../../auth/presentation/middlewares/auth.middleware";
 import { AccountDatasourceImpl, AccountRepositoryImpl } from "../infrastructure";
+import { AccountController } from "./controller";
+import { TransactionRoutes } from "./transaction/routes";
 
 
 
@@ -20,6 +21,8 @@ export class AccountRoutes {
     router.post('/', AuthMiddleware.validateJWT, controller.createAccount);
     router.get('/', AuthMiddleware.validateJWT, controller.getAllAccounts);
     router.get('/:id', AuthMiddleware.validateJWT, controller.getAccount);
+
+    router.use('/transaction', AuthMiddleware.validateJWT, TransactionRoutes.routes)
 
     
     return router;

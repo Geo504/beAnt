@@ -20,7 +20,7 @@ type SignToken = (payload: Object, duration?: string) => Promise<string | null>;
 
 
 interface LoginUserUseCase {
-  execute(loginUserDto: LoginUserDto): Promise<UserToken>
+  execute(loginUserDto: LoginUserDto): Promise<UserToken>;
 }
 
 
