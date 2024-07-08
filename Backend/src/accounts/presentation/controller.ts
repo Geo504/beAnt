@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { CreateAccountDto } from "../domain";
+import { CreateAccountDto, DeleteAccount, DeleteAccountDto, GetAccount, GetAccountDto, UpdateAccount, UpdateAccountDto } from "../domain";
 import { AccountRepository, CreateAccount, GetAllAccounts } from "../domain";
 import { CustomError } from "../../auth/domain";
 
@@ -43,10 +43,46 @@ export class AccountController {
 
 
   
-  getAccount = (req: Request, res: Response) => {
+  getAccountById = async (req: Request, res: Response) => {
     const userId = req.user!;
-    const { id } = req.params;
+    const accountId = req.params.id;
 
-    return res.json({ message: `account: ${id}, userId: ${userId}` });
+    const [error, getAccountDto] = GetAccountDto.create(accountId);
+    if (error) return res.status(400).json({ error });
+
+    return new GetAccount(this.accountRepository)
+      .execute(getAccountDto!.accountId, userId)
+      .then((data) => res.json(data))
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+
+  updateAccount = async (req: Request, res: Response) => {
+    const userId = req.user!;
+    const accountId = req.params.id;
+
+    const [error, updateAccountDto] = UpdateAccountDto.create(req.body, accountId);
+    if (error) return res.status(400).json({ error });
+
+    return new UpdateAccount(this.accountRepository)
+      .execute(updateAccountDto!, userId)
+      .then((data) => res.json(data))
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+
+  deleteAccount = async (req: Request, res: Response) => {
+    const userId = req.user!;
+    const accountId = req.params.id;
+
+    const [error, deleteAccountDto] = DeleteAccountDto.create(accountId);
+    if (error) return res.status(400).json({ error });
+
+    return new DeleteAccount(this.accountRepository)
+      .execute(deleteAccountDto!.accountId, userId)
+      .then(() => res.status(204).send())
+      .catch((error) => this.handleError(error, res));
   }
 }

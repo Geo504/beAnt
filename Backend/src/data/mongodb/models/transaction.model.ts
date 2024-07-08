@@ -56,4 +56,6 @@ transactionSchema.set('toJSON', {
   },
 })
 
+
+
 export const TransactionModel = mongoose.model('Transaction', transactionSchema);

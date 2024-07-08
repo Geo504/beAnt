@@ -1,0 +1,20 @@
+import { AccountRepository } from "../repositories/account.repository";
+
+
+
+interface DeleteAccountUseCase {
+  execute(accountId: string, userId: string): Promise<boolean>;
+}
+
+export class DeleteAccount implements DeleteAccountUseCase {
+  constructor(
+    private readonly accountRepository: AccountRepository,
+  ){}
+
+  async execute(accountId: string, userId: string): Promise<boolean> {
+    // Delete account
+    await this.accountRepository.deleteAccount(accountId, userId);
+
+    return true;
+  }
+}

@@ -1,5 +1,5 @@
-import { CreateTransactionDto } from "../dtos/create_transaction.dto";
-import { TransactionRepository } from "../../domain";
+import { CreateTransactionDto } from "../../dtos/create_transaction.dto";
+import { TransactionRepository } from "../..";
 
 
 interface Transaction {

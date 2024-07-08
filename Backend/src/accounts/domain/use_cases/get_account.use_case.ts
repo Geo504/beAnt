@@ -1,33 +1,33 @@
 import { AccountRepository } from "../repositories/account.repository";
 
-
-
 interface Account {
   id: string;
   name: string;
   balance: number;
   currency: string;
   users: object[];
+  transactions?: object[];
 }
 
-interface GetAllAccountsUseCase {
-  execute(userId: string): Promise<Account[]>;
+interface GetAccountUseCase {
+  execute(accountId: string, userId: string): Promise<Account>;
 }
 
-export class GetAllAccounts implements GetAllAccountsUseCase {
+export class GetAccount implements GetAccountUseCase {
   constructor(
     private readonly accountRepository: AccountRepository,
   ){}
 
-  async execute(userId: string): Promise<Account[]> {
-    const accounts = await this.accountRepository.getAllAccounts(userId);
+  async execute(accountId: string, userId: string): Promise<Account> {
+    const account = await this.accountRepository.getAccountById(accountId, userId);
 
-    return accounts.map(account => ({
+    return {
       id: account.id,
       name: account.name,
       balance: account.balance,
       currency: account.currency,
       users: account.users,
-    }));
+      transactions: account.transactions,
+    };
   }
 }

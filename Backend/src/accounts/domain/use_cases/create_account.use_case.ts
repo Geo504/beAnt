@@ -6,7 +6,6 @@ interface Account {
   id: string;
   name: string;
   balance: number;
-  favorite: boolean;
   currency: string;
 }
 
@@ -28,7 +27,6 @@ export class CreateAccount implements CreateAccountUseCase {
       id: account.id,
       name: account.name,
       balance: account.balance,
-      favorite: account.favorite,
       currency: account.currency,
     }
   }

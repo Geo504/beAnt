@@ -20,7 +20,9 @@ export class AccountRoutes {
 
     router.post('/', AuthMiddleware.validateJWT, controller.createAccount);
     router.get('/', AuthMiddleware.validateJWT, controller.getAllAccounts);
-    router.get('/:id', AuthMiddleware.validateJWT, controller.getAccount);
+    router.get('/:id', AuthMiddleware.validateJWT, controller.getAccountById);
+    router.put('/:id', AuthMiddleware.validateJWT, controller.updateAccount);
+    router.delete('/:id', AuthMiddleware.validateJWT, controller.deleteAccount);
 
     router.use('/transaction', AuthMiddleware.validateJWT, TransactionRoutes.routes)
 

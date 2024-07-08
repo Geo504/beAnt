@@ -1,5 +1,4 @@
 import mongoose, {Schema} from "mongoose";
-// import { TransactionModel } from "./transaction.model";
 
 
 const accountSchema = new Schema({
@@ -11,10 +10,6 @@ const accountSchema = new Schema({
     type: Number,
     required: [true, 'Balance is required'],
     default: 0
-  },
-  favorite: {
-    type: Boolean,
-    default: false
   },
   currency: {
     type: String,
