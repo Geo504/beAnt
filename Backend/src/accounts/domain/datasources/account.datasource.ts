@@ -5,10 +5,10 @@ import { AccountEntity } from "../entities/account.entities";
 
 
 
-export abstract class AccountDataSource {
+export abstract class AccountDataSource<T> {
   abstract createAccount(createAccountDto: CreateAccountDto, userId: string): Promise<AccountEntity>;
 
-  abstract getAllAccounts(userId: string): Promise<AccountEntity[]>;
+  abstract getAllAccounts(userId: string): Promise<T>;
 
   abstract getAccountById(accountId: string, userId: string): Promise<AccountEntity>;
 

@@ -15,7 +15,7 @@ interface UpdateAccountUseCase {
 
 export class UpdateAccount implements UpdateAccountUseCase {
   constructor(
-    private readonly accountRepository: AccountRepository,
+    private readonly accountRepository: AccountRepository<Account>,
   ){}
 
   async execute(updateAccountDto: UpdateAccountDto, userId: string): Promise<Account> {

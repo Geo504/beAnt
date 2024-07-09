@@ -5,7 +5,7 @@ import { AccountDataSource, AccountEntity, CreateAccountDto, UpdateAccountDto } 
 
 
 
-export class AccountDatasourceImpl implements AccountDataSource {
+export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
   constructor(
   
   ) {}
@@ -45,12 +45,21 @@ export class AccountDatasourceImpl implements AccountDataSource {
 
 
 
-  async getAllAccounts(userId: string): Promise<AccountEntity[]> {
+  async getAllAccounts(userId: string): Promise<T> {
     try {
-      const accounts = await AccountModel.find({ users: userId })
-        .populate('users', 'name email');
+      const [accounts, user] = await Promise.all([
+        AccountModel.find({ users: userId })
+          .populate('users', 'name email')
+          .select('-transactions')
+          .lean(),
+        UserModel.findById(userId).select('favoriteAccount')
+      ]);
+      const userFavoriteId = user?.favoriteAccount?.toString() ?? null;
 
-      return accounts.map(account => AccountEntity.fromObject(account));
+      return {
+        favoriteAccountId: userFavoriteId,
+        accounts: accounts
+      } as T;
 
     } catch (error) {
       if (error instanceof CustomError) {

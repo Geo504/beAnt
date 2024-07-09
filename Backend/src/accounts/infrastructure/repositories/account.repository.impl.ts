@@ -2,9 +2,9 @@ import { AccountDataSource, AccountEntity, AccountRepository, CreateAccountDto, 
 
 
 
-export class AccountRepositoryImpl implements AccountRepository {
+export class AccountRepositoryImpl<T> implements AccountRepository<T> {
   constructor(
-    private readonly accountDataSource: AccountDataSource,
+    private readonly accountDataSource: AccountDataSource<T>,
   ) {}
 
   
@@ -12,7 +12,7 @@ export class AccountRepositoryImpl implements AccountRepository {
     return this.accountDataSource.createAccount(createAccountDto, userId);
   }
 
-  getAllAccounts(userId: string): Promise<AccountEntity[]> {
+  getAllAccounts(userId: string): Promise<T> {
     return this.accountDataSource.getAllAccounts(userId);
   }
 

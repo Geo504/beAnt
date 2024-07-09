@@ -15,7 +15,7 @@ interface GetAccountUseCase {
 
 export class GetAccount implements GetAccountUseCase {
   constructor(
-    private readonly accountRepository: AccountRepository,
+    private readonly accountRepository: AccountRepository<Account>,
   ){}
 
   async execute(accountId: string, userId: string): Promise<Account> {

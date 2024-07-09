@@ -27,6 +27,10 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Account'
   }],
+  favoriteAccount: {
+    type: Schema.Types.ObjectId,
+    ref: 'Account'
+  },
 });
 
 userSchema.set('toJSON', {

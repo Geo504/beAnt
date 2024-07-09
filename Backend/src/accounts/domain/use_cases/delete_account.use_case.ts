@@ -8,7 +8,7 @@ interface DeleteAccountUseCase {
 
 export class DeleteAccount implements DeleteAccountUseCase {
   constructor(
-    private readonly accountRepository: AccountRepository,
+    private readonly accountRepository: AccountRepository<boolean>,
   ){}
 
   async execute(accountId: string, userId: string): Promise<boolean> {

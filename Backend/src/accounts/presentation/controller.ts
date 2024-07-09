@@ -4,9 +4,11 @@ import { CreateAccountDto, DeleteAccount, DeleteAccountDto, GetAccount, GetAccou
 import { AccountRepository, CreateAccount, GetAllAccounts } from "../domain";
 import { CustomError } from "../../auth/domain";
 
+
+
 export class AccountController {
   constructor(
-    private readonly accountRepository: AccountRepository,
+    private readonly accountRepository: AccountRepository<any>,
   ) {}
 
   private handleError = (error: unknown, res: Response) => {
