@@ -18,13 +18,15 @@ export class AccountRoutes {
 
     const controller = new AccountController(accountRepository);
 
+    router.use('/transactions', AuthMiddleware.validateJWT, TransactionRoutes.routes)
+    
     router.post('/', AuthMiddleware.validateJWT, controller.createAccount);
     router.get('/', AuthMiddleware.validateJWT, controller.getAllAccounts);
     router.get('/:id', AuthMiddleware.validateJWT, controller.getAccountById);
     router.put('/:id', AuthMiddleware.validateJWT, controller.updateAccount);
     router.delete('/:id', AuthMiddleware.validateJWT, controller.deleteAccount);
+    router.put('/favorite/:id', AuthMiddleware.validateJWT, controller.updateFavoriteAccount);
 
-    router.use('/transaction', AuthMiddleware.validateJWT, TransactionRoutes.routes)
 
     
     return router;

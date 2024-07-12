@@ -28,4 +28,8 @@ export class AccountRepositoryImpl<T> implements AccountRepository<T> {
     return this.accountDataSource.deleteAccount(accountId, userId);
   }
 
+  updateFavoriteAccount(accountId: string, userId: string): Promise<boolean> {
+    return this.accountDataSource.updateFavoriteAccount(accountId, userId);
+  }
+
 }

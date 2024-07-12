@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { CreateAccountDto, DeleteAccount, DeleteAccountDto, GetAccount, GetAccountDto, UpdateAccount, UpdateAccountDto } from "../domain";
+import { CreateAccountDto, DeleteAccount, GetAccount, UpdateAccount, UpdateAccountDto, UpdateFavoriteAccount, ValidateAccountIdDto } from "../domain";
 import { AccountRepository, CreateAccount, GetAllAccounts } from "../domain";
 import { CustomError } from "../../auth/domain";
 
@@ -49,11 +49,11 @@ export class AccountController {
     const userId = req.user!;
     const accountId = req.params.id;
 
-    const [error, getAccountDto] = GetAccountDto.create(accountId);
+    const [error, validateAccountIdDto] = ValidateAccountIdDto.create(accountId);
     if (error) return res.status(400).json({ error });
 
     return new GetAccount(this.accountRepository)
-      .execute(getAccountDto!.accountId, userId)
+      .execute(validateAccountIdDto!.accountId, userId)
       .then((data) => res.json(data))
       .catch((error) => this.handleError(error, res));
   }
@@ -79,11 +79,26 @@ export class AccountController {
     const userId = req.user!;
     const accountId = req.params.id;
 
-    const [error, deleteAccountDto] = DeleteAccountDto.create(accountId);
+    const [error, validateAccountIdDto] = ValidateAccountIdDto.create(accountId);
     if (error) return res.status(400).json({ error });
 
     return new DeleteAccount(this.accountRepository)
-      .execute(deleteAccountDto!.accountId, userId)
+      .execute(validateAccountIdDto!.accountId, userId)
+      .then(() => res.status(204).send())
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+
+  updateFavoriteAccount = async (req: Request, res: Response) => {
+    const userId = req.user!;
+    const accountId = req.params.id;
+
+    const [error, validateAccountIdDto] = ValidateAccountIdDto.create(accountId);
+    if (error) return res.status(400).json({ error });
+
+    return new UpdateFavoriteAccount(this.accountRepository)
+      .execute(validateAccountIdDto!.accountId, userId)
       .then(() => res.status(204).send())
       .catch((error) => this.handleError(error, res));
   }

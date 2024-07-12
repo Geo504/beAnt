@@ -31,10 +31,6 @@ const transactionSchema = new Schema({
     default: 'pending',
     enum: ['pending', 'send', 'paid', 'rejected']
   },
-  balanceAccount: {
-    type: Number,
-    required: [true, 'Balance account is required'],
-  },
 
   user: {
     type: Schema.Types.ObjectId,

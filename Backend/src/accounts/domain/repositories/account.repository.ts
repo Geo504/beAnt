@@ -1,5 +1,5 @@
-import { CreateAccountDto } from "../dtos/create_account.dto";
-import { UpdateAccountDto } from "../dtos/update_account.dto";
+import { CreateAccountDto } from "../dtos/account/create_account.dto";
+import { UpdateAccountDto } from "../dtos/account/update_account.dto";
 
 import { AccountEntity } from "../entities/account.entities";
 
@@ -15,5 +15,7 @@ export abstract class AccountRepository<T> {
   abstract updateAccount(updateAccountDto: UpdateAccountDto, userId: string): Promise<AccountEntity>;
 
   abstract deleteAccount(accountId: string, userId: string): Promise<boolean>;
+
+  abstract updateFavoriteAccount(accountId: string, userId: string): Promise<boolean>;
 
 }

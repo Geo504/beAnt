@@ -121,14 +121,46 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
 
   async deleteAccount(accountId: string, userId: string): Promise<boolean> {
     try {
-      const accountExists = await AccountModel.findOne({ _id: accountId, users: userId });
+      const accountExists = await AccountModel.exists({ _id: accountId, users: userId });
       if (!accountExists) throw CustomError.notFound('Account not found');
+
+      const user = await UserModel.findById(userId);
+
+      if (user!.favoriteAccount && user!.favoriteAccount.toString() === accountId) {
+        const otherAccount = await AccountModel.findOne({ users: userId, _id: { $ne: accountId } }, '_id');
+        user!.favoriteAccount = otherAccount ? otherAccount._id : null;
+        await user!.save();
+      }
       
       await Promise.all([
         AccountModel.findOneAndDelete({ _id: accountId, users: userId }),
         TransactionModel.deleteMany({ account: accountId }),
         UserModel.updateOne({ _id: userId }, { $pull: { accounts: accountId } })
       ]);
+
+      return true;
+
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      console.log(error);
+      throw CustomError.internalServer();
+    }
+  }
+
+
+
+  async updateFavoriteAccount(accountId: string, userId: string): Promise<boolean> {
+    try {
+      const accountExists = await AccountModel.exists({ _id: accountId, users: userId });
+      if (!accountExists) throw CustomError.notFound('Account not found');
+
+      await UserModel.findByIdAndUpdate(
+        userId,
+        { favoriteAccount: accountId },
+        { new: true, safe: true, upsert: false }
+      );
 
       return true;
 

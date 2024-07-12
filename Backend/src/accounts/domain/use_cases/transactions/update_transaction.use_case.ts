@@ -1,9 +1,9 @@
-import { CreateTransactionDto } from "../../dtos/transaction/create_transaction.dto";
+import { UpdateTransactionDto } from "../../dtos/transaction/update_transaction.dto";
 import { TransactionRepository } from "../../repositories/transaction.repository";
 
 
-interface Transaction {
-  id: string;
+interface TransactionUpdate {
+  transactionId: string;
   name: string;
   value: number;
   date: Date;
@@ -14,23 +14,23 @@ interface Transaction {
   accountId: string;
 }
 
-interface CreateTransactionUseCase {
-  execute(createTransactionDto: CreateTransactionDto, userId: string): Promise<Transaction>
+interface UpdateTransactionUseCase {
+  execute(updateTransactionDto: UpdateTransactionDto, userId: string): Promise<TransactionUpdate>
 }
 
 
 
-export class CreateTransaction implements CreateTransactionUseCase {
+export class UpdateTransaction implements UpdateTransactionUseCase {
   constructor(
     private readonly transactionRepository: TransactionRepository,
   ){}
 
-  async execute(createTransactionDto: CreateTransactionDto, userId: string): Promise<Transaction> {
+  async execute(updateTransactionDto: UpdateTransactionDto, userId: string): Promise<TransactionUpdate> {
 
-    const transaction = await this.transactionRepository.createTransaction(createTransactionDto, userId);
+    const transaction = await this.transactionRepository.updateTransaction(updateTransactionDto, userId);
 
     return {
-      id: transaction.id,
+      transactionId: transaction.id,
       name: transaction.name,
       value: transaction.value,
       date: transaction.date,

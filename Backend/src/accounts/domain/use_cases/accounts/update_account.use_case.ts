@@ -1,4 +1,4 @@
-import { AccountRepository, UpdateAccountDto } from "..";
+import { AccountRepository, UpdateAccountDto } from "../..";
 
 
 

@@ -1,4 +1,4 @@
-import { AccountRepository, CreateAccountDto } from "../../domain";
+import { AccountRepository, CreateAccountDto } from "../..";
 
 
 

@@ -1,4 +1,4 @@
-import { AccountRepository } from "../repositories/account.repository";
+import { AccountRepository } from "../../repositories/account.repository";
 
 interface Account {
   id: string;

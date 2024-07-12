@@ -1,5 +1,6 @@
-import { AccountEntity } from "../entities/account.entities";
-import { AccountRepository } from "../repositories/account.repository";
+import { AccountEntity } from "../../entities/account.entities";
+
+import { AccountRepository } from "../../repositories/account.repository";
 
 
 
