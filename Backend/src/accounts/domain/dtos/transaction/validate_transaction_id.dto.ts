@@ -7,10 +7,10 @@ export class ValidateTransactionIdDto {
     public transactionId: string
   ) {}
 
-  static create(accountId: string): [string?, ValidateTransactionIdDto?] {
-    if (!accountId) return ['Account id is required'];
-    if (!Validators.isMongoID(accountId)) return ['Account id invalid'];
+  static create(transactionId: string): [string?, ValidateTransactionIdDto?] {
+    if (!transactionId) return ['Transaction id is required'];
+    if (!Validators.isMongoID(transactionId)) return ['Transaction id invalid'];
 
-    return [undefined, new ValidateTransactionIdDto(accountId)];
+    return [undefined, new ValidateTransactionIdDto(transactionId)];
   }
 }

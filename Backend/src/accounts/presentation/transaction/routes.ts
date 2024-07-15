@@ -19,6 +19,7 @@ export class TransactionRoutes {
     router.get('/', controller.getAllTransactions);
     router.get('/:transactionId', controller.getTransactionById);
     router.put('/:transactionId', controller.updateTransaction);
+    router.delete('/:transactionId', controller.deleteTransaction);
 
     
     return router;

@@ -154,4 +154,30 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
     }
   }
 
+
+
+  async deleteTransaction(transactionId: string, userId: string): Promise<boolean> {
+    try {
+      const transaction = await TransactionModel.findOne({ _id: transactionId, user: userId });
+      if (!transaction) throw CustomError.notFound('Transaction not found');
+
+      await Promise.all([
+        AccountModel.updateOne(
+          { _id: transaction.account },
+          { $pull: { transactions: transactionId }, $inc: { balance: -transaction.value } }
+        ),
+        TransactionModel.deleteOne({ _id: transactionId })
+      ]);
+
+      return true;
+
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      console.log(error);
+      throw CustomError.internalServer();
+    }
+  }
+
 }

@@ -12,4 +12,6 @@ export abstract class TransactionRepository {
 
   abstract updateTransaction(updateTransactionDto: object, userId: string): Promise<TransactionEntity>;
 
+  abstract deleteTransaction(transactionId: string, userId: string): Promise<boolean>;
+
 }

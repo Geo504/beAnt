@@ -13,4 +13,6 @@ export abstract class TransactionDataSource {
 
   abstract updateTransaction(updateTransactionDto: UpdateTransactionDto, userId: string): Promise<TransactionEntity>;
 
+  abstract deleteTransaction(transactionId: string, userId: string): Promise<boolean>;
+
 }

@@ -22,4 +22,8 @@ export class TransactionRepositoryImpl implements TransactionRepository {
   updateTransaction(updateTransactionDto: UpdateTransactionDto, userId: string): Promise<TransactionEntity> {
     return this.transactionDataSource.updateTransaction(updateTransactionDto, userId);
   }
+
+  deleteTransaction(transactionId: string, userId: string): Promise<boolean> {
+    return this.transactionDataSource.deleteTransaction(transactionId, userId);
+  }
 }
