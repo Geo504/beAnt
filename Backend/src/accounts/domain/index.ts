@@ -7,6 +7,7 @@ export * from './dtos/account/validate_account_id.dto'
 export * from './dtos/transaction/create_transaction.dto'
 export * from './dtos/transaction/validate_transaction_id.dto'
 export * from './dtos/transaction/update_transaction.dto'
+export * from './dtos/shared/pagination.dto'
 
 export * from './entities/account.entities'
 export * from './entities/transaction.entities'

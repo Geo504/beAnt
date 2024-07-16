@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { CreateTransaction, CreateTransactionDto, DeleteTransaction, GetAllTransactions, GetTransaction, TransactionRepository, UpdateTransaction, UpdateTransactionDto, ValidateTransactionIdDto } from "../../domain";
+import { CreateTransaction, CreateTransactionDto, DeleteTransaction, GetAllTransactions, GetTransaction, PaginationDto, TransactionRepository, UpdateTransaction, UpdateTransactionDto, ValidateTransactionIdDto } from "../../domain";
 import { CustomError } from "../../../auth/domain";
 
 export class TransactionController {
@@ -33,9 +33,13 @@ export class TransactionController {
 
   getAllTransactions = async (req: Request, res: Response) => {
     const userId = req.user!;
+    
+    const { page=1, limit=10 } = req.query;
+    const [error, paginationDto] = PaginationDto.create(+page, +limit);
+    if (error) return res.status(400).json({ error });
 
     return new GetAllTransactions(this.transactionRepository)
-      .execute(userId)
+      .execute(paginationDto!, userId)
       .then((data) => res.json(data))
       .catch((error) => this.handleError(error, res));
   }

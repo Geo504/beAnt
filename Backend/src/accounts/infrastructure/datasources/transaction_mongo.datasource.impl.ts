@@ -1,7 +1,7 @@
 import { AccountModel, TransactionModel } from "../../../data";
 
 import { CustomError } from "../../../auth/domain";
-import { CreateTransactionDto, TransactionDataSource, TransactionEntity, UpdateTransactionDto } from "../../domain";
+import { CreateTransactionDto, PaginationDto, TransactionDataSource, TransactionEntity, UpdateTransactionDto } from "../../domain";
 
 
 
@@ -48,19 +48,33 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
 
 
 
-  async getAllTransactions(userId: string): Promise<object[]> {
+  async getAllTransactions(paginationDto: PaginationDto, userId: string): Promise<object> {
+    const { page, limit } = paginationDto;
+
     try {
       const accounts = await AccountModel.find({ users: userId }).select('_id');
       if (!accounts) throw CustomError.notFound('Accounts not found');
 
       const accountIds = accounts.map(account => account._id);
 
-      const transactions = await TransactionModel.find({ account: { $in: accountIds } })
-        .populate('account', 'name currency')
-        .populate('user', 'name')
-        .sort({ date: -1 });
+      const [transactions, total] = await Promise.all([
+        TransactionModel.find({ account: { $in: accountIds } })
+          .populate('account', 'name currency')
+          .populate('user', 'name')
+          .sort({ date: -1 })
+          .skip((page - 1) * limit)
+          .limit(limit),
+        TransactionModel.countDocuments({ account: { $in: accountIds } })
+      ]);
 
-      return transactions;
+      const totalPage = Math.ceil(total / limit);
+
+      return {
+        actualPage: page,
+        totalPage: totalPage,
+        limitPerPage: limit,
+        transactions: transactions
+      };
 
     } catch (error) {
       console.log(error);
