@@ -117,7 +117,6 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
         const newBalanceOldAccount = (oldAccount.balance - oldValue).toFixed(2);
         const newBalanceNewAccount = (account.balance + newValue).toFixed(2);
 
-        // await Promise.all([
         await AccountModel.bulkWrite([
           {updateOne: {
             filter: { _id: oldTransaction.account },
@@ -128,8 +127,6 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
             update: { $addToSet: {transactions: transactionId}, $set: {balance: newBalanceNewAccount} }
           }}
         ]);
-          // TransactionModel.updateOne({ _id: transactionId }, { $set: { account: accountId } })
-        // ]);
       } 
       // Update balance if only the value has changed
       else if (updateData.value && (accountId === oldTransaction.account.toString() || !accountId)) {
