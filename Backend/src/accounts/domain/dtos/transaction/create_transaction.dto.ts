@@ -23,6 +23,7 @@ export class CreateTransactionDto {
 
     if (!value) return ['invalid value'];
     if (isNaN(value) || typeof value !== "number") return ['invalid value'];
+    if (parseFloat(value.toFixed(2)) !== value) return ['invalid value'];
 
     if (!category) return ['invalid category'];
     if (typeof category !== 'string') return ['invalid category'];

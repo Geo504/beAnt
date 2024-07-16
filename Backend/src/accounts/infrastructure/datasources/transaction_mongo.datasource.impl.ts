@@ -6,9 +6,7 @@ import { CreateTransactionDto, TransactionDataSource, TransactionEntity, UpdateT
 
 
 export class TransactionMongoDataSourceImpl implements TransactionDataSource {
-  constructor(
-  
-  ) {}
+  constructor() {}
 
   async createTransaction(createTransactionDto: CreateTransactionDto, userId: string): Promise<TransactionEntity> {
     const { name, value, category, accountId, date } = createTransactionDto;
@@ -16,6 +14,8 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
     try {
       const account = await AccountModel.findOne({ _id: accountId, users: userId });
       if (!account) throw CustomError.notFound('Account not found');
+
+      const newBalance = +(account.balance + value).toFixed(2);
       
       const transaction = new TransactionModel({
         name: name,
@@ -31,7 +31,7 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
       
       await AccountModel.findOneAndUpdate(
         { _id: accountId , users: userId},
-        { $inc: { balance: value }, $push: { transactions: transaction._id } },
+        { $set: { balance: newBalance }, $push: { transactions: transaction._id } },
         { new: true }
       );
   
@@ -96,49 +96,58 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
 
 
   async updateTransaction(updateTransactionDto: UpdateTransactionDto, userId: string): Promise<TransactionEntity> {
-    try {
-      const { transactionId, accountId, ...updateData } = updateTransactionDto;
+    const { transactionId, accountId, ...updateData } = updateTransactionDto;
 
-      // Find the old transaction
-      const oldTransaction = await TransactionModel.findOne({ _id: transactionId, user: userId });
+    try {
+      const oldTransaction = await TransactionModel.findOne({ _id: transactionId, user: userId }, { account: 1, value: 1 });
       if (!oldTransaction) throw CustomError.notFound('Transaction not found');
 
       // Check if account change is needed
       if (accountId && accountId !== oldTransaction.account.toString()) {
-        const account = await AccountModel.exists({ _id: accountId, users: userId });
-        if (!account) throw CustomError.notFound('Account not found');
+        const accounts = await AccountModel.find({ _id: { $in: [accountId, oldTransaction.account] }, users: userId }, { balance: 1 });
+        
+        const accountsMap = new Map(accounts.map(acc => [acc._id.toString(), acc]));
+        const account = accountsMap.get(accountId);
+        const oldAccount = accountsMap.get(oldTransaction.account.toString());
+        if (!account || !oldAccount) throw CustomError.notFound('Account not found');
 
-        await Promise.all([
-          AccountModel.bulkWrite([
-            {updateOne: {
-              filter: { _id: oldTransaction.account },
-              update: { 
-                $pull: { transactions: transactionId }, 
-                $inc: { balance: -oldTransaction.value } 
-              }
-            }},
-            {updateOne: {
-              filter: { _id: accountId },
-              update: { 
-                $addToSet: { transactions: transactionId },
-                $inc: { balance: updateData.value || oldTransaction.value } 
-              }
-            }}
-          ]),
-          TransactionModel.updateOne({ _id: transactionId }, { $set: { account: accountId } })
+        const oldValue = +oldTransaction.value.toFixed(2);
+        const newValue = updateData.value ? +updateData.value.toFixed(2) : oldValue;
+
+        const newBalanceOldAccount = (oldAccount.balance - oldValue).toFixed(2);
+        const newBalanceNewAccount = (account.balance + newValue).toFixed(2);
+
+        // await Promise.all([
+        await AccountModel.bulkWrite([
+          {updateOne: {
+            filter: { _id: oldTransaction.account },
+            update: { $pull: {transactions: transactionId}, $set: {balance: newBalanceOldAccount} }
+          }},
+          {updateOne: {
+            filter: { _id: accountId },
+            update: { $addToSet: {transactions: transactionId}, $set: {balance: newBalanceNewAccount} }
+          }}
         ]);
+          // TransactionModel.updateOne({ _id: transactionId }, { $set: { account: accountId } })
+        // ]);
       } 
       // Update balance if only the value has changed
       else if (updateData.value && (accountId === oldTransaction.account.toString() || !accountId)) {
+        const account = await AccountModel.findOne({ _id: oldTransaction.account, users: userId });
+        if (!account) throw CustomError.notFound('Account not found');
+
+        const balanceChange = +(updateData.value - oldTransaction.value).toFixed(2);
+        const newBalance = (account.balance + balanceChange).toFixed(2);
+        
         await AccountModel.updateOne(
           { _id: oldTransaction.account },
-          { $inc: { balance: updateData.value - oldTransaction.value } }
+          { $set: { balance: newBalance } }
         );
       }
       // Update the transaction
       const updatedTransaction = await TransactionModel.findOneAndUpdate(
         { _id: transactionId },
-        { ...updateData },
+        { ...updateData, account: accountId },
         { new: true }
       );
       if (!updatedTransaction) throw CustomError.internalServer();

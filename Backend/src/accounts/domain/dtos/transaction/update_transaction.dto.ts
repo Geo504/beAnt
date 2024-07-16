@@ -28,6 +28,7 @@ export class UpdateTransactionDto {
 
     if (value) {
       if (isNaN(value) || typeof value !== "number") return ['invalid value'];
+      if (parseFloat(value.toFixed(2)) !== value) return ['invalid value'];
       type = value < 0 ? 'expense' : 'income';
     }
 
