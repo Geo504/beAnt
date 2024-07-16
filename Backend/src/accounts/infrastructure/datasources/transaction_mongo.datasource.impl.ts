@@ -71,7 +71,7 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
 
       return {
         actualPage: page,
-        totalPage: totalPage,
+        totalPages: totalPage,
         limitPerPage: limit,
         transactions: transactions
       };
