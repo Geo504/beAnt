@@ -1,4 +1,4 @@
-import { CreateTransactionDto, PaginationDto, TransactionDataSource, TransactionEntity, TransactionRepository, UpdateTransactionDto } from "../../domain";
+import { CreateTransactionDto, GetAllQueriesDto, PaginationDto, TransactionDataSource, TransactionEntity, TransactionRepository, UpdateTransactionDto } from "../../domain";
 
 
 
@@ -11,8 +11,8 @@ export class TransactionRepositoryImpl implements TransactionRepository {
     return this.transactionDataSource.createTransaction(createTransactionDto, userId);
   }
 
-  getAllTransactions( paginationDto: PaginationDto,userId: string): Promise<object> {
-    return this.transactionDataSource.getAllTransactions(paginationDto, userId);
+  getAllTransactions( paginationDto: PaginationDto,userId: string, getAllQueriesDto?: GetAllQueriesDto): Promise<object> {
+    return this.transactionDataSource.getAllTransactions(paginationDto, userId, getAllQueriesDto);
   }
 
   getTransactionById(transactionId: string, userId: string): Promise<object> {

@@ -1,7 +1,7 @@
 import { AccountModel, TransactionModel } from "../../../data";
 
 import { CustomError } from "../../../auth/domain";
-import { CreateTransactionDto, PaginationDto, TransactionDataSource, TransactionEntity, UpdateTransactionDto } from "../../domain";
+import { CreateTransactionDto, GetAllQueriesDto, PaginationDto, TransactionDataSource, TransactionEntity, UpdateTransactionDto } from "../../domain";
 
 
 
@@ -48,30 +48,44 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
 
 
 
-  async getAllTransactions(paginationDto: PaginationDto, userId: string): Promise<object> {
+
+  async getAllTransactions(paginationDto: PaginationDto, userId: string, getAllQueriesDto?: GetAllQueriesDto ): Promise<object> {
     const { page, limit } = paginationDto;
 
-    try {
-      const accounts = await AccountModel.find({ users: userId }).select('_id');
-      if (!accounts) throw CustomError.notFound('Accounts not found');
+    type FilterType = {
+      account: string | { $in: string[] };
+      name?: { $regex: RegExp };
+    };
 
-      const accountIds = accounts.map(account => account._id);
+    async function getAccountIds(userId: string): Promise<string[]> {
+      const accounts = await AccountModel.find({ users: userId }).select('_id');
+      if (!accounts || accounts.length === 0) throw CustomError.notFound('Accounts not found');
+      return accounts.map(account => account._id.toString());
+    }
+
+    try {
+      let filter:FilterType  = getAllQueriesDto?.accountId
+        ? { account: getAllQueriesDto.accountId }
+        : { account: { $in: await getAccountIds(userId) } };
+      
+      if (getAllQueriesDto?.name) {
+        filter.name = { $regex: new RegExp(getAllQueriesDto.name, 'i') };
+      }
 
       const [transactions, total] = await Promise.all([
-        TransactionModel.find({ account: { $in: accountIds } })
+        TransactionModel.find(filter)
           .populate('account', 'name currency')
           .populate('user', 'name')
           .sort({ date: -1 })
           .skip((page - 1) * limit)
           .limit(limit),
-        TransactionModel.countDocuments({ account: { $in: accountIds } })
+        TransactionModel.countDocuments(filter)
       ]);
-
-      const totalPage = Math.ceil(total / limit);
 
       return {
         actualPage: page,
-        totalPages: totalPage,
+        totalPages: Math.ceil(total / limit),
+        totalTransaction: total,
         limitPerPage: limit,
         transactions: transactions
       };

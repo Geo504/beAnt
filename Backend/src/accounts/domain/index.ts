@@ -3,10 +3,10 @@ export * from './datasources/transaction.datasource'
 
 export * from './dtos/account/create_account.dto'
 export * from './dtos/account/update_account.dto'
-export * from './dtos/account/validate_account_id.dto'
 export * from './dtos/transaction/create_transaction.dto'
-export * from './dtos/transaction/validate_transaction_id.dto'
 export * from './dtos/transaction/update_transaction.dto'
+export * from './dtos/transaction/get_all_transaction_queries.dto'
+export * from './dtos/shared/validate_mongo_id.dto'
 export * from './dtos/shared/pagination.dto'
 
 export * from './entities/account.entities'

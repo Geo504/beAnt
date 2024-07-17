@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Link from "next/link";
-// import { usePathname } from "next/navigation";
 
 import { useSidebarStore } from "@/src/store/sidebar";
 
@@ -22,7 +20,7 @@ export default function SidebarMenuItem({ title, subtitle, icon, path }: Props) 
   const { openTag, setOpenTag, setSidebarOpen } = useSidebarStore();
 
   const handleSidebarToggle = () => {
-    const MD_BREAKPOINT = 768;  // TailwindCSS md breakpoint por defecto es 768px,
+    const MD_BREAKPOINT = 768;  // TailwindCSS md breakpoint is 768px,
     if (window.innerWidth < MD_BREAKPOINT) {
       setSidebarOpen();
     }
