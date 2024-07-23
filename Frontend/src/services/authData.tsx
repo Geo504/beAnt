@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 
-import { ErrorResponse, User } from "../interfaces";
+import { ErrorResponse, User, UserProfile } from "../interfaces";
 
 
 
@@ -95,6 +95,33 @@ export async function getUser(): Promise<User | null> {
 
   if (!res.ok) {
     return null;
+  }
+
+  return res.json();
+}
+
+
+
+export type UpdateProfileResponse = {
+  name?: string;
+  last_name?: string;
+  profession?: string;
+  phone?: string;
+  birth?: Date;
+}
+
+export async function updateUser(data: UpdateProfileResponse): Promise<UpdateProfileResponse | ErrorResponse> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: cookies().toString(),
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    return {errorMessage: 'Error updating. Please try again.'};
   }
 
   return res.json();

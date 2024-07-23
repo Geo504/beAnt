@@ -34,6 +34,7 @@ interface Props {
 }
 
 
+
 export default function RegisterForm({ registerUser }: Props) {
   const [viewPassword, setViewPassword] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)

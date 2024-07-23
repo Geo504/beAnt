@@ -17,7 +17,7 @@ const menuItems = [
   },
   {
     title: 'Profile',
-    subtitle: ['Total Balance', 'Total Capital'],
+    subtitle: ['Profile Setup', 'Total Capital'],
     icon: <ProfileSvg />,
     path: '/user/profile',
   },

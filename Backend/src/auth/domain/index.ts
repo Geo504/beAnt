@@ -5,6 +5,7 @@ export * from './dtos/login_user.dto';
 export * from './dtos/update_user.dto';
 
 export * from './entities/user.entities';
+export * from './entities/profile.entities';
 
 export * from './errors/custom.error';
 

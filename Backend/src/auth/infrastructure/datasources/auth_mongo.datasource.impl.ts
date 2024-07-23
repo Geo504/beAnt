@@ -1,7 +1,7 @@
 import { BcryptAdapter } from "../../../config";
-import { AccountModel, TransactionModel, UserModel } from "../../../data";
+import { AccountModel, TransactionModel, UserModel, UserProfileModel } from "../../../data";
 
-import { AuthDataSource, CustomError, LoginUserDto, RegisterUserDto, UpdateUserDto, UserEntity } from "../../domain";
+import { AuthDataSource, CustomError, LoginUserDto, ProfileEntity, RegisterUserDto, UpdateUserDto, UserEntity } from "../../domain";
 
 
 
@@ -114,18 +114,31 @@ export class AuthDataSourceImpl implements AuthDataSource {
     }
   }
 
+  
 
+  async updateUser(updateUserDto: UpdateUserDto, userId: string): Promise<ProfileEntity> {
+    const {name, ...updateProfile} = updateUserDto;
 
-  async updateUser(updateUserDto: UpdateUserDto, userId: string): Promise<UserEntity> {
     try {
-      const user = await UserModel.findByIdAndUpdate(
-        userId, 
-        { $set: { name: updateUserDto.name } },
-        { new: true }
-      );
-      if (!user) throw CustomError.notFound('User not found');
+      if (name) {
+        await UserModel.findByIdAndUpdate(userId, { $set: { name: name } });
+      }
 
-      return UserEntity.fromObject(user);
+      let query = { user: userId };
+      let update = updateProfile ? { $set: updateProfile } : undefined;
+      let options = { new: true, upsert: !!updateProfile };
+    
+      const userProfile = await UserProfileModel.findOneAndUpdate(query, update, options)
+        .populate('user', 'name').lean() as ProfileEntity & { user: { name: string } };
+      if (!userProfile) throw CustomError.notFound('User not found');
+
+      return {
+        name: userProfile.user.name,
+        lastName: userProfile.lastName ?? undefined,
+        profession: userProfile.profession ?? undefined,
+        phone: userProfile.phone ?? undefined,
+        birth: userProfile.birth ?? undefined,
+      };
 
     } catch (error) {
       if (error instanceof CustomError) {
@@ -166,4 +179,4 @@ export class AuthDataSourceImpl implements AuthDataSource {
       throw CustomError.internalServer();
     }
   }
-}
+} 

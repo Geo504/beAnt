@@ -14,6 +14,7 @@ export * from "./eyeOpen";
 export * from "./eyeClose";
 
 export * from "./arrowRight";
+export * from "./arrowLeft";
 export * from "./check";
 export * from "./circle";
 
@@ -22,3 +23,7 @@ export * from "./profile";
 export * from "./accounts";
 export * from "./gear";
 export * from "./logOut";
+
+export * from "./camera";
+export * from "./update";
+export * from "./calendar";

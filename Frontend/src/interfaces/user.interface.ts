@@ -5,6 +5,13 @@ export interface User {
   img?: string;
 }
 
+export interface UserProfile extends User {
+  last_name?: string;
+  profession?: string;
+  phone?: string;
+  birth?: Date;
+}
+
 
 
 export interface ErrorResponse {

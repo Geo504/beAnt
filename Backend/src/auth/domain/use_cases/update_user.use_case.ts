@@ -1,15 +1,17 @@
 import { AuthRepository } from "../repositories/auth.repository";
 import { UpdateUserDto } from "../dtos/update_user.dto";
-// import { CustomError } from "../errors/custom.error";
 
 
-
-interface UserProfile {
+interface UserProfileResponse {
   name: string;
+  lastName?: string;
+  profession?: string;
+  phone?: string;
+  birth?: Date;
 }
 
 interface UpdateUserUseCase {
-  execute( updateUserDto: UpdateUserDto, userId: string): Promise<UserProfile>;
+  execute( updateUserDto: UpdateUserDto, userId: string): Promise<UserProfileResponse>;
 }
 
 
@@ -19,12 +21,16 @@ export class UpdateUser implements UpdateUserUseCase {
     private readonly authRepository: AuthRepository,
   ){}
 
-  async execute(updateUserDto: UpdateUserDto, userId: string): Promise<UserProfile> {
-    // Update user
-    const user = await this.authRepository.updateUser(updateUserDto, userId);
+  async execute(updateUserDto: UpdateUserDto, userId: string): Promise<UserProfileResponse> {
+    // Update user profile
+    const userProfile = await this.authRepository.updateUser(updateUserDto, userId);
 
     return {
-      name: user.name,
+      name: userProfile.name,
+      lastName: userProfile.lastName,
+      profession: userProfile.profession,
+      phone: userProfile.phone,
+      birth: userProfile.birth,
     }
   }
 }

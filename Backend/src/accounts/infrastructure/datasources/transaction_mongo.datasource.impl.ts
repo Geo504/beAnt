@@ -83,9 +83,9 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
       ]);
 
       return {
+        totalItems: total,
         actualPage: page,
         totalPages: Math.ceil(total / limit),
-        totalTransaction: total,
         limitPerPage: limit,
         transactions: transactions
       };
