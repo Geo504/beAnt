@@ -2,21 +2,20 @@
 
 import { useState } from "react";
 
-import { UserProfile } from "@/src/interfaces";
-
 import { CameraSvg } from "@/src/components/icons";
+import { GetProfileResponse } from "@/src/services/authData";
 
 
 
 interface Props {
-  profileData: UserProfile | null;
+  profileData: GetProfileResponse | null;
 }
 
 export default function ProfilePic({ profileData }: Props) {
   const [imageUrl, setImageUrl] = useState<string>("https://beant.s3.eu-west-3.amazonaws.com/web_images/default_avatar.jpg");
 
-  if (profileData && profileData.img) {
-    setImageUrl(profileData.img);
+  if (profileData && profileData.user.img) {
+    setImageUrl(profileData.user.img);
   }
 
 
@@ -32,7 +31,9 @@ export default function ProfilePic({ profileData }: Props) {
       <input type="file" id="profile_picture" className="hidden" />
     </div>
 
-    <h2 className="font-medium text-primary mt-4 text-center">{profileData?.name}</h2>
+    <h2 className="font-medium text-primary mt-4 text-center">
+      {`${profileData?.user.name} ${profileData?.lastName}`}
+    </h2>
     <p className="text-muted-foreground">{profileData?.profession}</p>
     </>
   )

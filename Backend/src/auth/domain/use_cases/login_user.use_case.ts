@@ -26,7 +26,7 @@ interface LoginUserUseCase {
 
 export class LoginUser implements LoginUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: AuthRepository<UserToken>,
     private readonly signToken: SignToken = JwtAdapter.generateToken,
   ){}
 

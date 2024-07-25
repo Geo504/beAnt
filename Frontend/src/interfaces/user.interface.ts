@@ -6,7 +6,7 @@ export interface User {
 }
 
 export interface UserProfile extends User {
-  last_name?: string;
+  lastName?: string;
   profession?: string;
   phone?: string;
   birth?: Date;

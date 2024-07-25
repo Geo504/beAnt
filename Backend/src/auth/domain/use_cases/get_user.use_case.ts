@@ -15,7 +15,7 @@ interface GetUserUseCase {
 
 export class GetUser implements GetUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: AuthRepository<UserProfile>,
   ){}
 
   async execute(userId: string): Promise<UserProfile> {

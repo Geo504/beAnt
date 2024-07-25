@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-import { ErrorResponse, UserProfile } from "@/src/interfaces";
-import { UpdateProfileResponse } from "@/src/services/authData";
+import { ErrorResponse } from "@/src/interfaces";
+import { GetProfileResponse, UpdateProfileResponse } from "@/src/services/authData";
 
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
@@ -20,7 +20,7 @@ import { CalendarSvg, UpdateSvg } from "@/src/components/icons";
 
 
 interface Props {
-  profileData: UserProfile | null;
+  profileData: GetProfileResponse | null;
   updateProfile: (data: UpdateProfileResponse) => Promise<UpdateProfileResponse | ErrorResponse>;
 }
 
@@ -39,11 +39,11 @@ export default function ProfileForm({ profileData, updateProfile }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: profileData?.name || "",
-      lastName: profileData?.last_name || "",
+      name: profileData?.user.name || "",
+      lastName: profileData?.lastName || "",
       profession: profileData?.profession || "",
       phone: profileData?.phone || "",
-      birth: profileData?.birth || undefined,
+      birth: profileData?.birth ? new Date(profileData.birth) : undefined,
     },
   })
 
@@ -110,7 +110,7 @@ export default function ProfileForm({ profileData, updateProfile }: Props) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input className="bg-transparent border-muted-foreground" value={profileData?.email} disabled />
+                <Input className="bg-transparent border-muted-foreground" value={profileData?.user.email} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>

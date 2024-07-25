@@ -2,9 +2,9 @@ import { AuthDataSource, AuthRepository, LoginUserDto, ProfileEntity, RegisterUs
 
 
 
-export class AuthRepositoryImpl implements AuthRepository {
+export class AuthRepositoryImpl<T> implements AuthRepository<T> {
   constructor(
-    private readonly authDataSource: AuthDataSource,
+    private readonly authDataSource: AuthDataSource<T>,
   ) {}
 
 
@@ -22,6 +22,10 @@ export class AuthRepositoryImpl implements AuthRepository {
 
   getUser(userId: string): Promise<UserEntity> {
     return this.authDataSource.getUser(userId);
+  }
+
+  getUserProfile(userId: string): Promise<T> {
+    return this.authDataSource.getUserProfile(userId);
   }
 
   updateUser(updateUserDto: UpdateUserDto, userId: string): Promise<ProfileEntity> {

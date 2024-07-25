@@ -10,7 +10,7 @@ interface DeleteUserUseCase {
 
 export class DeleteUser implements DeleteUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: AuthRepository<boolean>,
   ){}
 
   async execute(userId: string): Promise<boolean> {

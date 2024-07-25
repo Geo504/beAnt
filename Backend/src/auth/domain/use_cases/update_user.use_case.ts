@@ -18,7 +18,7 @@ interface UpdateUserUseCase {
 
 export class UpdateUser implements UpdateUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: AuthRepository<UserProfileResponse>,
   ){}
 
   async execute(updateUserDto: UpdateUserDto, userId: string): Promise<UserProfileResponse> {

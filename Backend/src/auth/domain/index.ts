@@ -15,5 +15,6 @@ export * from './use_cases/register_user.use_case';
 export * from './use_cases/login_user.use_case';
 export * from './use_cases/validate_email.use_case';
 export * from './use_cases/get_user.use_case';
+export * from './use_cases/get_user_profile.use_case';
 export * from './use_cases/update_user.use_case';
 export * from './use_cases/delete_user.use_case';

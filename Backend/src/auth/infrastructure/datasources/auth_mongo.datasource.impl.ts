@@ -10,7 +10,7 @@ type CompareFunction = (password: string, hash: string) => boolean;
 
 
 
-export class AuthDataSourceImpl implements AuthDataSource {
+export class AuthDataSourceImpl<T> implements AuthDataSource<T> {
   constructor(
     private readonly hashPassword: HashFunction = BcryptAdapter.hash,
     private readonly comparePassword: CompareFunction = BcryptAdapter.compare,
@@ -99,11 +99,35 @@ export class AuthDataSourceImpl implements AuthDataSource {
 
   async getUser(userId: string): Promise<UserEntity> {
     try {
-      //verify user exists
       const user = await UserModel.findById(userId);
       if (!user) throw CustomError.notFound('User not found');
 
       return UserEntity.fromObject(user);
+
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      console.log(error);
+      throw CustomError.internalServer();
+    }
+  }
+
+
+
+  async getUserProfile(userId: string): Promise<T> {
+    try {
+      const userProfile = await UserProfileModel.findOne({ user: userId })
+        .populate('user', 'name email img');
+      if (!userProfile) throw CustomError.notFound('User not found');
+
+      return {
+        user: userProfile.user,
+        lastName: userProfile.lastName ?? undefined,
+        profession: userProfile.profession ?? undefined,
+        phone: userProfile.phone ?? undefined,
+        birth: userProfile.birth ?? undefined,
+      } as T;
 
     } catch (error) {
       if (error instanceof CustomError) {

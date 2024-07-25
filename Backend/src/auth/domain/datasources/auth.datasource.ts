@@ -7,7 +7,7 @@ import { UpdateUserDto } from "../dtos/update_user.dto";
 
 
 
-export abstract class AuthDataSource {
+export abstract class AuthDataSource<T> {
   abstract registerUser(registerUserDto: RegisterUserDto): Promise<UserEntity>;
 
   abstract loginUser(loginUserDto: LoginUserDto): Promise<UserEntity>;
@@ -15,6 +15,8 @@ export abstract class AuthDataSource {
   abstract validateEmail(email: string): Promise<boolean>;
 
   abstract getUser(id: string): Promise<UserEntity>;
+
+  abstract getUserProfile(id: string): Promise<T>;
 
   abstract updateUser(updateUserDto: UpdateUserDto, id: string): Promise<ProfileEntity>;
 

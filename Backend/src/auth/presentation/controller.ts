@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { envs } from "../../config";
 
-import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail, GetUser, UpdateUser, UpdateUserDto, DeleteUser } from "../domain";
+import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, ValidateEmail, GetUser, UpdateUser, UpdateUserDto, DeleteUser, GetUserProfile } from "../domain";
 
 
 
 export class AuthController {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: AuthRepository<any>,
   ) {}
 
   private handleError = (error: unknown, res: Response) => {
@@ -66,6 +66,17 @@ export class AuthController {
     const userId = req.user!;
 
     return new GetUser(this.authRepository)
+      .execute(userId)
+      .then((data) => res.json(data))
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+
+  getUserProfile = async (req: Request, res: Response) => {
+    const userId = req.user!;
+
+    return new GetUserProfile(this.authRepository)
       .execute(userId)
       .then((data) => res.json(data))
       .catch((error) => this.handleError(error, res));

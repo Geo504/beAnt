@@ -102,9 +102,32 @@ export async function getUser(): Promise<User | null> {
 
 
 
+export type GetProfileResponse = {
+  user: User;
+  lastName?: string;
+  profession?: string;
+  phone?: string;
+  birth?: Date;
+}
+
+export async function getUserProfile(): Promise<GetProfileResponse | null> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/profile`, {
+    method: "GET",
+    headers: {Cookie: cookies().toString()},
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+
+  return res.json();
+}
+
+
+
 export type UpdateProfileResponse = {
   name?: string;
-  last_name?: string;
+  lastName?: string;
   profession?: string;
   phone?: string;
   birth?: Date;

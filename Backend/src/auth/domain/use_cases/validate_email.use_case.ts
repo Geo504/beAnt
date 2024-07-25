@@ -12,7 +12,7 @@ interface ValidateEmailUseCase {
 
 export class ValidateEmail implements ValidateEmailUseCase {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: AuthRepository<boolean>,
   ){}
   
   async execute(token: string): Promise<boolean> {

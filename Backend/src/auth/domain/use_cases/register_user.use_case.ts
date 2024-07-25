@@ -22,7 +22,7 @@ interface RegisterUserUseCase {
 
 export class RegisterUser implements RegisterUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: AuthRepository<User>,
     private readonly emailService: EmailService = new EmailService(
       envs.EMAIL_SERVICE,
       envs.EMAIL_NAME,
