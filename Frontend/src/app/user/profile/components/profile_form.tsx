@@ -1,9 +1,10 @@
 "use client";
 
-import { z } from "zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { toast } from "sonner";
 
 import { ErrorResponse } from "@/src/interfaces";
@@ -35,7 +36,8 @@ const formSchema = z.object({
 
 
 export default function ProfileForm({ profileData, updateProfile }: Props) {
-
+  const [isSubmitEnabled, setIsSubmitEnabled] = useState<boolean>(false);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,6 +49,13 @@ export default function ProfileForm({ profileData, updateProfile }: Props) {
     },
   })
 
+  const { isDirty } = form.formState;
+
+  useEffect(() => {
+    setIsSubmitEnabled(isDirty);
+  }, [isDirty]);
+
+  
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const filteredValues = Object.fromEntries(
       Object.entries(values).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
@@ -59,6 +68,7 @@ export default function ProfileForm({ profileData, updateProfile }: Props) {
         return toast.error(updatedProfile.errorMessage);
       }
       toast.success("Profile updated successfully!");
+      form.reset(values);
 
     } catch (error) {
       toast.error("An unexpected error occurred.");
@@ -73,7 +83,7 @@ export default function ProfileForm({ profileData, updateProfile }: Props) {
 
         <header className="flex justify-between items-center border-b-2">
           <h2 className="text-lg font-semibold text-primary">Profile Setup</h2>
-          <Button size="sm" className="mb-2" type="submit">
+          <Button size="sm" className="mb-2" type="submit" disabled={!isSubmitEnabled}>
             Update
             <UpdateSvg className="ml-1" size={18}/>
           </Button>
