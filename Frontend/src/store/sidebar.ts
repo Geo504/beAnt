@@ -15,10 +15,3 @@ export const useSidebarStore = create<Store>()((set) => ({
   openTag: "",
   setOpenTag: (tag: string) => set({openTag: tag}),
 }))
-
-
-
-// export const useStore = create<Store>()((set) => ({
-//   user: null,
-//   updateUser: (userData: User | null) => set({user: userData }),
-// }))

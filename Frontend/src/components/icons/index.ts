@@ -9,6 +9,8 @@ export * from "./menu";
 export * from "./close";
 export * from "./sun";
 export * from "./moon";
+export * from "./star";
+export * from "./starFill";
 
 export * from "./eyeOpen";
 export * from "./eyeClose";
@@ -17,6 +19,7 @@ export * from "./arrowRight";
 export * from "./arrowLeft";
 export * from "./check";
 export * from "./circle";
+export * from "./plusCircle";
 
 export * from "./home";
 export * from "./profile";

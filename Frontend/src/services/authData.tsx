@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 
-import { ErrorResponse, User, UserProfile } from "../interfaces";
+import { ErrorResponse, User } from "../interfaces";
 
 
 

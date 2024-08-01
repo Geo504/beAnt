@@ -31,7 +31,7 @@ export default function SidebarMenuItem({ title, subtitle, icon, path }: Props) 
   return (
     <>
     <button
-      className={`flex items-center gap-1 px-2 py-1 rounded text-lg font-medium transition ease-linear duration-200 ${ openTag === title ? 'text-primary-foreground bg-primary hover:bg-primary/90' : 'text-primary hover:bg-background'}`}
+      className={`flex items-center gap-1 px-2 py-1 rounded text-lg font-medium transition ease-linear duration-200 ${ openTag === title ? 'text-primary-foreground bg-primarySoft hover:bg-primary/90' : 'text-primary hover:bg-background'}`}
       onClick={()=>setOpenTag(openTag === title ? '' : title)}>
 
       {icon}

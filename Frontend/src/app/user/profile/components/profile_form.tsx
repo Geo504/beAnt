@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, set } from "date-fns";
 import { toast } from "sonner";
+import { format } from "date-fns";
 
 import { ErrorResponse } from "@/src/interfaces";
 import { GetProfileResponse, UpdateProfileResponse } from "@/src/services/authData";
