@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 import { Account } from "../interfaces";
 
@@ -36,6 +37,7 @@ export async function updateFavoriteAccount(accountId: string): Promise<boolean>
     return false;
   }
 
+  revalidatePath('/user/accounts');
   return true;
 }
 
@@ -62,5 +64,6 @@ export async function createAccount(data: {name: string, currency?: string}): Pr
     return null;
   }
 
+  revalidatePath('/user/accounts');
   return res.json();
 }

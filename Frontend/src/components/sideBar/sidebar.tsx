@@ -38,7 +38,7 @@ export default function SideBar() {
     <>
     {sidebarOpen && (
       <div 
-        className="fade-out fixed md:hidden top-0 left-0 w-screen h-screen z-10 bg-primarySoft/30 backdrop-blur-sm"
+        className="fixed md:hidden top-0 left-0 w-screen h-screen z-10 bg-primarySoft/30 backdrop-blur-sm"
         onClick={ setSidebarOpen }
       />
     )}

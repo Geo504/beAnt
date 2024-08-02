@@ -41,7 +41,7 @@ export default function ProfileForm({ profileData, updateProfile }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: profileData?.user.name || "",
+      name: profileData?.user.name || undefined,
       lastName: profileData?.lastName || "",
       profession: profileData?.profession || "",
       phone: profileData?.phone || "",
@@ -59,7 +59,7 @@ export default function ProfileForm({ profileData, updateProfile }: Props) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const filteredValues = Object.fromEntries(
       Object.entries(values).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
-        .filter(([_, value]) => value !== undefined && value !== '')
+        .filter(([_, value]) => value !== undefined)
     );
     
     try {

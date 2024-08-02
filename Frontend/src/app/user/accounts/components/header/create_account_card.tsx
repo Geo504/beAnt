@@ -1,3 +1,4 @@
+"use client";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,13 +51,13 @@ export default function CreateAccountCard({ accountNumber, createAccount }: Prop
 
 
   return (
-    <div className="px-4 py-2 rounded w-32 md:w-48 lg:w-64 bg-secondary text-primary">
+    <div className="px-4 py-2 rounded w-32 md:w-48 lg:w-60 bg-secondary text-primary">
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="relative flex justify-between items-center">
             <h3 className="font-medium mt-1 mb-3">Create Account</h3>
-            <button type="submit" className="absolute top-0 -right-2 p-1 rounded text-muted-foreground hover:shadow hover:bg-background transition-all duration-300">
+            <button type="submit" className="absolute top-0 -right-2 p-1 rounded text-muted-foreground hover:shadow dark:hover:shadow-primary/50 hover:bg-background transition-all duration-300">
               <PlusCircleSvg />
             </button>
           </div>

@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { jwtDecode } from "jwt-decode";
 
 import { ErrorResponse, User } from "../interfaces";
@@ -147,5 +148,6 @@ export async function updateUser(data: UpdateProfileResponse): Promise<UpdatePro
     return {errorMessage: 'Error updating. Please try again.'};
   }
 
+  revalidatePath('/user/profile');
   return res.json();
 }
