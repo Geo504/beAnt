@@ -9,6 +9,7 @@ export * from "./menu";
 export * from "./close";
 export * from "./sun";
 export * from "./moon";
+export * from "./computer";
 export * from "./star";
 export * from "./starFill";
 
@@ -26,7 +27,10 @@ export * from "./profile";
 export * from "./accounts";
 export * from "./gear";
 export * from "./logOut";
+export * from "./options";
 
 export * from "./camera";
 export * from "./update";
 export * from "./calendar";
+export * from "./editPencil";
+export * from "./trash";

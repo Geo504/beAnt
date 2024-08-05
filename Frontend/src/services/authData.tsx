@@ -9,7 +9,6 @@ import { ErrorResponse, User } from "../interfaces";
 
 
 export type RegisterResponse = {success: true} | ErrorResponse;
-
 export async function registerUser(data: {name: string, email: string, password: string}) : Promise<RegisterResponse> {
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`, {
@@ -35,7 +34,6 @@ export async function registerUser(data: {name: string, email: string, password:
 
 
 export type LoginResponse = {user: User} | ErrorResponse;
-
 export async function loginUser(data: {email: string, password: string}): Promise< LoginResponse > {
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
@@ -110,7 +108,6 @@ export type GetProfileResponse = {
   phone?: string;
   birth?: Date;
 }
-
 export async function getUserProfile(): Promise<GetProfileResponse | null> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/profile`, {
     method: "GET",
@@ -133,7 +130,6 @@ export type UpdateProfileResponse = {
   phone?: string;
   birth?: Date;
 }
-
 export async function updateUser(data: UpdateProfileResponse): Promise<UpdateProfileResponse | ErrorResponse> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user`, {
     method: "PUT",

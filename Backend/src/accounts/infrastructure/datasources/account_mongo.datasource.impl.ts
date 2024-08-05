@@ -76,7 +76,6 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
     try {
       const account = await AccountModel.findOne({ _id: accountId, users: userId })
         .populate('users', 'name email')
-        .populate('transactions', 'name value date category status type');
       
       if (!account) throw CustomError.notFound('Account not found');
 

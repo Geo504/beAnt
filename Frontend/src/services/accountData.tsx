@@ -11,7 +11,6 @@ export type GetAccountsResponse = {
   favoriteAccountId: string | null,
   accounts: Account[],
 };
-
 export async function getAllAccounts(): Promise<GetAccountsResponse | null> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account`, {
     method: "GET",
@@ -49,7 +48,6 @@ export type CreateAccountResponse = {
   balance: number;
   currency: string;
 }
-
 export async function createAccount(data: {name: string, currency?: string}): Promise<CreateAccountResponse | null> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account`, {
     method: "POST",
@@ -66,4 +64,35 @@ export async function createAccount(data: {name: string, currency?: string}): Pr
 
   revalidatePath('/user/accounts');
   return res.json();
+}
+
+
+
+export async function getAccount(accountId: string): Promise<Account | null> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/${accountId}`, {
+    method: "GET",
+    headers: {Cookie: cookies().toString()},
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+
+  return res.json();
+}
+
+
+
+export async function deleteAccount(accountId: string): Promise<boolean> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/${accountId}`, {
+    method: "DELETE",
+    headers: {Cookie: cookies().toString()},
+  });
+
+  if (!res.ok) {
+    return false;
+  }
+
+  revalidatePath('/user/accounts');
+  return true;
 }

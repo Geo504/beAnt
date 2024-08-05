@@ -2,18 +2,8 @@
 import { useTheme } from "next-themes"
 
 import { Button } from "@/src/components/ui/button"
-import { MoonSvg, SunSvg } from "../icons"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-
-  DropdownMenuRadioGroup,
-
-  DropdownMenuRadioItem,
-
-  DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu"
+import { ComputerSvg, MoonSvg, SunSvg } from "../icons"
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/src/components/ui/dropdown-menu"
 
 
 
@@ -23,14 +13,17 @@ export function ModeToggle() {
   const dropdownContent = [
     {
       text: "Light",
+      icon: <SunSvg className="mr-2 w-4 h-4"/>,
       funcString: "light",
     },
     {
       text: "Dark",
+      icon: <MoonSvg className="mr-2 w-4 h-4"/>,
       funcString: "dark",
     },
     {
       text: "System",
+      icon: <ComputerSvg className="mr-2 w-4 h-4"/>,
       funcString: "system",
     },
   ]
@@ -47,8 +40,13 @@ export function ModeToggle() {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end">
-        {dropdownContent.map(({ text, funcString }) => (
-          <DropdownMenuItem onClick={() => setTheme(funcString)} key={text}>
+        {dropdownContent.map(({ text, funcString, icon }) => (
+          <DropdownMenuItem
+            className="text-primary"
+            key={text}
+            onClick={() => setTheme(funcString)}
+          >
+            {icon}
             {text}
           </DropdownMenuItem>
         ))}

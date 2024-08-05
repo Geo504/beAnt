@@ -40,7 +40,10 @@ export default function ProfileImg({user, logoutUser }: Props) {
 
 
       <DropdownMenuContent className="w-44 mr-4">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel className="flex flex-col">
+          My User
+          <span className="text-xs text-muted-foreground font-normal">{user?.email}</span>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
