@@ -2,18 +2,19 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { CreateAccountResponse } from "@/src/services/accountData";
+import { ErrorResponse } from "@/src/interfaces";
 
 import { Input } from "@/src/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form"
+import { Form, FormControl, FormField, FormItem } from "@/src/components/ui/form"
 import { PlusCircleSvg } from "@/src/components/icons";
-import { toast } from "sonner";
 
 
 interface Props {
   accountNumber: number;
-  createAccount: (data: { name: string, currency?: string }) => Promise<CreateAccountResponse | null>;
+  createAccount: (data: { name: string, currency?: string }) => Promise<CreateAccountResponse | ErrorResponse>;
 }
 
 const formSchema = z.object({
@@ -29,14 +30,16 @@ export default function CreateAccountCard({ accountNumber, createAccount }: Prop
     },
   })
 
+  
   const { errors } = form.formState;
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const newAccount = await createAccount(values);
-      if (!newAccount) {
-        return toast.error("Failed to create account");
+      const resp = await createAccount(values);
+
+      if ('errorMessage' in resp) {
+        return toast.error(resp.errorMessage);
       }
 
       form.reset();

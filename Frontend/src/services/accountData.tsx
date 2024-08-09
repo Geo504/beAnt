@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-import { Account } from "../interfaces";
+import { Account, ErrorResponse } from "../interfaces";
 
 
 
@@ -48,7 +48,7 @@ export type CreateAccountResponse = {
   balance: number;
   currency: string;
 }
-export async function createAccount(data: {name: string, currency?: string}): Promise<CreateAccountResponse | null> {
+export async function createAccount(data: {name: string, currency?: string}): Promise<CreateAccountResponse | ErrorResponse> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account`, {
     method: "POST",
     headers: {
@@ -58,8 +58,11 @@ export async function createAccount(data: {name: string, currency?: string}): Pr
     body: JSON.stringify(data),
   });
 
+  if (res.status === 403) {
+    return {errorMessage: 'You have reached the maximum number of accounts'};
+  }
   if (!res.ok) {
-    return null;
+    return {errorMessage: 'Error creating account. Please try again.'};
   }
 
   revalidatePath('/user/accounts');
@@ -78,6 +81,31 @@ export async function getAccount(accountId: string): Promise<Account | null> {
     return null;
   }
 
+  return res.json();
+}
+
+
+
+export type UpdateAccountResponse = {
+  id: string;
+  name: string;
+  currency: string;
+}
+export async function updateAccount(accountId: string, data: {name: string, currency: string}): Promise<UpdateAccountResponse | null> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/${accountId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: cookies().toString(),
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+
+  revalidatePath('/user/accounts');
   return res.json();
 }
 

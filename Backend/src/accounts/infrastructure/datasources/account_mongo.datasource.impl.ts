@@ -15,7 +15,7 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
 
     try {
       const accountCount = await AccountModel.countDocuments({ users: userId });
-      if (accountCount >= 3) throw CustomError.forbidden('You can only have 3 accounts');
+      if (accountCount >= 4) throw CustomError.forbidden('You can only have 4 accounts');
 
       const account = new AccountModel({
         name: name,

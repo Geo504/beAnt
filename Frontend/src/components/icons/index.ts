@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export * from "./logo";
 
 export * from "./instagram";
@@ -18,9 +20,12 @@ export * from "./eyeClose";
 
 export * from "./arrowRight";
 export * from "./arrowLeft";
+export * from "./arrowUp";
+export * from "./arrowDown";
 export * from "./check";
 export * from "./circle";
 export * from "./plusCircle";
+export * from "./minusCircle";
 
 export * from "./home";
 export * from "./profile";
@@ -34,3 +39,16 @@ export * from "./update";
 export * from "./calendar";
 export * from "./editPencil";
 export * from "./trash";
+export * from "./creditCardPlus";
+
+export * from "./basicService";
+export * from "./education";
+export * from "./entertainment";
+export * from "./food";
+export * from "./homeCategory";
+export * from "./healthHeart";
+export * from "./restaurant";
+export * from "./pet";
+export * from "./shoppingBag";
+export * from "./transportation";
+export * from "./work";

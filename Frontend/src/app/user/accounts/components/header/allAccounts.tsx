@@ -3,13 +3,7 @@ import { createAccount, GetAccountsResponse, updateFavoriteAccount } from "@/src
 import AccountCard from "./account_card";
 import CreateAccountCard from "./create_account_card";
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/src/components/ui/carousel"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/src/components/ui/carousel"
 
 interface Props {
   allAccounts: GetAccountsResponse | null;
@@ -21,7 +15,7 @@ export default async function AllAccounts({allAccounts}: Props) {
   
   return (
     <>
-    <h1 className="text-2xl font-semibold mt-1 text-primary">
+    <h1 className="text-2xl font-semibold my-1 text-primary">
       Accounts
     </h1>
 
@@ -31,10 +25,9 @@ export default async function AllAccounts({allAccounts}: Props) {
         dragFree: true,
       }}
     >
-      <CarouselContent className="">
-
+      <CarouselContent>
         {allAccounts?.accounts.map((account) => (
-          <CarouselItem key={account.id} className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+          <CarouselItem key={account.id} className="pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/4 xl:basis-1/5">
             <AccountCard
               account={account}
               favoriteAccountId={allAccounts?.favoriteAccountId}
@@ -43,16 +36,15 @@ export default async function AllAccounts({allAccounts}: Props) {
           </CarouselItem>
         ))}
         
-        <CarouselItem className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+        <CarouselItem className="pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/4 xl:basis-1/5">
           <CreateAccountCard
             accountNumber={allAccounts?.accounts.length || 0} 
             createAccount={createAccount}
           />
         </CarouselItem>
-      
       </CarouselContent>
-      <CarouselPrevious className="block"/>
-      <CarouselNext />
+      {/* <CarouselPrevious />
+      <CarouselNext /> */}
     </Carousel>
     </>
   )

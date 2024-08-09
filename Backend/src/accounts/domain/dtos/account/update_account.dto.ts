@@ -22,7 +22,7 @@ export class UpdateAccountDto {
     
     if (name) {
       if (typeof name !== 'string') return ['name must be a string'];
-      if (name.length < 3) return ['name too short'];
+      if (name.length < 1) return ['name too short'];
     }
 
     if (favorite) {
