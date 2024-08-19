@@ -20,7 +20,7 @@ export class CreateTransactionDto {
 
     if (!name) return ['invalid name'];
     if (typeof name !== 'string') return ['invalid name'];
-    if (name.length < 3) return ['invalid name'];
+    if (name.length < 1) return ['invalid name'];
 
     if (!value) return ['invalid value'];
     if (isNaN(value) || typeof value !== "number") return ['invalid value'];

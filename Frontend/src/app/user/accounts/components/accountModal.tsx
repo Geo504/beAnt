@@ -4,7 +4,7 @@ import { UpdateAccountResponse } from "@/src/services/accountData";
 import { useAccountModalStore } from "@/src/store/accountModal";
 import DeleteAccount from "./main/form/deleteAccount";
 import UpdateAccountForm from "./main/form/updateAccountForm";
-import { Account, ErrorResponse } from "@/src/interfaces";
+import { Account } from "@/src/interfaces";
 
 import Modal from "@/src/components/ui/modal";
 import AddTransactionForm from "./main/form/addTransactionForm";
@@ -71,7 +71,7 @@ export default function AccountModal({ accountData, updateAccount, deleteAccount
       isOpen={isOpen}
       onOpenChange={setIsOpen}
     >
-      {renderComponent()}
+      { renderComponent() }
     </Modal>
-  )
+  );
 }

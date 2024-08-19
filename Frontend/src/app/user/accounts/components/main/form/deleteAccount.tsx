@@ -14,7 +14,7 @@ interface Props {
 
 export default function DeleteAccount({account, deleteAccount, setIsOpen}: Props) {
 
-    const handleDelete = async() => {
+  const handleDelete = async() => {
     try {
       const success = await deleteAccount(account.id);
       if (success) {

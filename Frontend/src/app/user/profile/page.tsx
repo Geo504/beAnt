@@ -6,7 +6,9 @@ export default function ProfilePage() {
     <>
     <h1 className="text-2xl font-semibold mt-1 text-primary">Profile</h1>
 
-    <ProfileSetup />
+    <main className="grid grid-cols-4 gap-4">
+      <ProfileSetup />
+    </main>
     </>
   )
 }

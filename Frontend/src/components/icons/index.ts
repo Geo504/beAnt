@@ -33,6 +33,7 @@ export * from "./accounts";
 export * from "./gear";
 export * from "./logOut";
 export * from "./options";
+export * from "./optionsHorizontal";
 
 export * from "./camera";
 export * from "./update";
@@ -47,8 +48,10 @@ export * from "./entertainment";
 export * from "./food";
 export * from "./homeCategory";
 export * from "./healthHeart";
+export * from "./investment";
 export * from "./restaurant";
 export * from "./pet";
 export * from "./shoppingBag";
 export * from "./transportation";
 export * from "./work";
+export * from "./circleEmpty";

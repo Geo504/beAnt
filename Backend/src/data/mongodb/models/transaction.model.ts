@@ -29,7 +29,7 @@ const transactionSchema = new Schema({
     type: String,
     required: [true, 'Status is required'],
     default: 'pending',
-    enum: ['pending', 'send', 'paid', 'rejected']
+    enum: ['pending', 'send', 'paid', 'rejected', 'canceled']
   },
 
   user: {

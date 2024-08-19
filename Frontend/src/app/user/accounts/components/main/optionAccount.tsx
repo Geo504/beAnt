@@ -1,5 +1,5 @@
 "use client";
-import { modalConfig, useAccountModalStore } from "@/src/store/accountModal";
+import { accountModalConfig, useAccountModalStore } from "@/src/store/accountModal";
 
 import { Button } from "@/src/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
@@ -20,17 +20,17 @@ export default function OptionAccount({ accountName }: Props) {
     {
       icon: <EditPencilSvg className="mr-2 h-4 w-4" />,
       text: "Edit",
-      action: modalConfig.edit,
+      action: accountModalConfig.edit,
     },
     {
       icon: <CreditCardPlusSvg className="mr-2 h-4 w-4" />,
       text: "Add transaction",
-      action: modalConfig.addTransaction,
+      action: accountModalConfig.addTransaction,
     },
     {
       icon: <TrashSvg className="mr-2 h-4 w-4" />,
       text: "Delete",
-      action: modalConfig.delete,
+      action: accountModalConfig.delete,
     },
   ]
 

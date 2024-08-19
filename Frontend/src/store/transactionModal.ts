@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { Transaction } from '../interfaces';
 
 
 
@@ -7,28 +8,24 @@ type ModalData = {
   action: string;
   title: string;
   description: string;
+  transaction?: Transaction;
 };
 
-export const  accountModalConfig = {
+export const transactionModalConfig = {
   edit: {
     action: "edit",
     position: "right",
-    title: "Edit Account",
-    description: "Update your account information",
-  } as ModalData,
-  addTransaction: {
-    action: "addTransaction",
-    position: "right",
-    title: "Add Transaction",
-    description: "Add a new transaction to one account",
+    title: "Edit Transaction",
+    description: "Update transaction information",
   } as ModalData,
   delete: {
     action: "delete",
     position: "center",
-    title: "Delete Account",
-    description: "Delete all information related to this account",
+    title: "Delete Transaction",
+    description: "Delete transaction from this account",
   } as ModalData,
-};
+}
+
 
 
 
@@ -39,20 +36,20 @@ type Store = {
   modalData: ModalData;
   setModalData: (modalData: ModalData) => void;
 
-  handleOpenModal: (modalData: ModalData) => void;
+  handleOpenModal: (modalData: ModalData, transaction: any) => void;
 }
 
 
 
-export const useAccountModalStore = create<Store>((set) => ({
+export const useTransactionModalStore = create<Store>((set) => ({
   isOpen: false,
   setIsOpen: (isOpen) => set({ isOpen }),
 
   modalData: {position: "right", action: "", title: "", description: ""},
   setModalData: (modalData) => set({ modalData }),
 
-  handleOpenModal: (modalData) => {
+  handleOpenModal: (modalData, transaction) => {
     set({ isOpen: true });
-    set({ modalData });
+    set({  modalData: { ...modalData, transaction } });
   },
 }))
