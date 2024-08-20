@@ -11,21 +11,29 @@ import { AccountsSvg, CloseSvg, HomeSvg, ProfileSvg } from "../icons";
 const menuItems = [
   {
     title: 'Home',
-    subtitle: ['Total Period Income', 'Total Period Expenses', 'Total Balance', 'Monthly Expenses', 'Statistics Accounts', 'Income vs. Expense', 'Payments History', 'Monthly Budgets', 'Transaction History'],
+    subtitle: [
+      {name: 'Total Period Income', path: '/user/home'},
+      {name: 'Total Period Expenses', path: '/user/home/gfdg'},
+      {name: 'Total Balance', path: '/user/home/ghdhgd'},
+      {name: 'Monthly Expenses', path: '/user/home/hgdhgd'},
+    ],
     icon: <HomeSvg />,
-    path: '/user/home',
   },
   {
     title: 'Profile',
-    subtitle: ['Profile Setup', 'Total Capital'],
+    subtitle: [
+      {name: 'Profile Setup', path: '/user/profile'},
+      {name: 'Total Capital', path: '/user/profile/notfound'}
+    ],
     icon: <ProfileSvg />,
-    path: '/user/profile',
   },
   {
     title: 'Accounts',
-    subtitle: ['Accounts', 'Total Period Income', 'Total Period Expenses', 'Total Balance', 'Statistics Accounts'],
+    subtitle: [
+      {name: 'Accounts', path: '/user/accounts'}, 
+      {name: 'Transactions History', path: '/user/accounts/transactions'}
+    ],
     icon: <AccountsSvg />,
-    path: '/user/accounts',
   }
 ]
 
@@ -56,7 +64,7 @@ export default function SideBar() {
       
       <nav className="flex flex-col gap-0.5">
         {menuItems.map( item => (
-          <SidebarMenuItem key={item.path} {...item} />
+          <SidebarMenuItem key={item.title} {...item} />
         ))}
       </nav>
 

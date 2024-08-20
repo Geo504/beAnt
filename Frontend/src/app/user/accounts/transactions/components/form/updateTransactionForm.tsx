@@ -6,8 +6,8 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 
 import { createTransactionResponse } from "@/src/services/transactionData";
-import { Account } from "@/src/interfaces";
-import { categoryIcons, transactionsCategories } from "./utils/transactionCategory";
+import { Account, Transaction } from "@/src/interfaces";
+import { categoryIcons, transactionsCategories } from "../../utils/transactionCategory";
 
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
@@ -30,9 +30,9 @@ interface InputsSended {
 
 interface Props {
   allAccounts: Account[];
-  currentAccount?: Account | undefined;
   setIsOpen: (isOpen: boolean) => void;
-  createTransaction: (data: {name: string, value: number, category: string, accountId: string, date: string}) => Promise<createTransactionResponse | null>;
+  updateTransaction: (data: {name: string, value: number, category: string, accountId: string, date: string}, id: string) => Promise<createTransactionResponse | null>;
+  transaction?: Transaction;
 }
 
 const formSchema = z.object({
@@ -52,30 +52,34 @@ const formSchema = z.object({
     }, { message: "Value can not be 0." }),
   category: z.string(),
   accountId: z.string(),
-  date: z
-    .date(),
+  date: z.date(),
 })
 
 
 
-export default function AddTransactionForm({ allAccounts, currentAccount, setIsOpen, createTransaction }: Props) {
-  const [currency, setCurrency] = useState(currentAccount?.currency);
+export default function UpdateTransactionForm({ allAccounts, setIsOpen, updateTransaction, transaction }: Props) {
+  const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+  const [currency, setCurrency] = useState(transaction?.account.id);
 
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      value: "",
-      category: undefined,
-      accountId: currentAccount?.id,
-      date: new Date(),
+      name: transaction?.name,
+      value: transaction?.value.toString(),
+      category: transaction?.category,
+      accountId: transaction?.account.id,
+      date: transaction?.date ? new Date(transaction.date) : new Date(),
     },
   })
+
+  const { isDirty } = form.formState;
+  useEffect(() => {
+    setIsSubmitEnabled(isDirty);
+  }, [isDirty]);
   
 
   const { accountId } = form.watch();
-
   useEffect(() => {
     if (accountId !== undefined) {
       const selectedAccount = allAccounts.find(account => account.id === accountId);
@@ -100,7 +104,7 @@ export default function AddTransactionForm({ allAccounts, currentAccount, setIsO
     };
 
     try {
-      const success = await createTransaction(formattedValues);
+      const success = await updateTransaction(formattedValues, transaction?.id || "");
       if (!success) {
         return toast.error("Error creating transaction. Please try again.");
       }
@@ -272,8 +276,8 @@ export default function AddTransactionForm({ allAccounts, currentAccount, setIsO
             )}
           />
 
-          <Button type="submit" size={"full"} className="mt-4">
-            Create Transaction
+          <Button type="submit" size={"full"} className="mt-4" disabled={!isSubmitEnabled}>
+            Update Transaction
           </Button>
         </div>
 

@@ -46,7 +46,7 @@ export type getTransactionsByIdResponse = {
   transactions: Transaction[];
 }
 export async function getTransactionsById(accountId: string): Promise<getTransactionsByIdResponse | null> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/transactions?accountId=${accountId}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/transactions?accountId=${accountId}&limit=5`, {
     headers: {
       Cookie: cookies().toString(),
     },
@@ -58,6 +58,41 @@ export async function getTransactionsById(accountId: string): Promise<getTransac
 
   return res.json();
 }
+
+
+
+export type getTransactionsResponse = {
+  totalItems: number;
+  actualPage: number;
+  totalPages: number;
+  limitPerPage: number;
+  transactions: Transaction[];
+}
+export async function getTransactions(query?: { accountId?: string; name?: string }): Promise<getTransactionsByIdResponse | null> {
+  const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/transactions`);
+
+  if (query && (query.accountId || query.name)) {
+    if (query.accountId) {
+      url.searchParams.append('accountId', query.accountId);
+    }
+    if (query.name) {
+      url.searchParams.append('name', query.name);
+    }
+  }
+
+  const res = await fetch(url.toString(), {
+    headers: {
+      Cookie: cookies().toString(),
+    },
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+
+  return res.json();
+}
+
 
 
 

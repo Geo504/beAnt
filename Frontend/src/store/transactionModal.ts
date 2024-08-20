@@ -12,6 +12,12 @@ type ModalData = {
 };
 
 export const transactionModalConfig = {
+  add: {
+    action: "add",
+    position: "right",
+    title: "Add Transaction",
+    description: "Add a new transaction to one account",
+  } as ModalData,
   edit: {
     action: "edit",
     position: "right",
@@ -36,7 +42,7 @@ type Store = {
   modalData: ModalData;
   setModalData: (modalData: ModalData) => void;
 
-  handleOpenModal: (modalData: ModalData, transaction: any) => void;
+  handleOpenModal: (modalData: ModalData, transaction?: any) => void;
 }
 
 

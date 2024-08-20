@@ -1,19 +1,20 @@
 "use client";
-import { updateTransactionResponse } from "@/src/services/transactionData";
-
 import { useTransactionModalStore } from "@/src/store/transactionModal";
-import UpdateTransactionForm from "../form/updateTransactionForm";
-import { Account, Transaction } from "@/src/interfaces";
 
+import { Account } from "@/src/interfaces";
+import { createTransaction, updateTransactionResponse } from "@/src/services/transactionData";
+
+import AddTransactionForm from "./form/addTransactionForm";
+import UpdateTransactionForm from "../components/form/updateTransactionForm";
+import DeleteTransaction from "../components/form/deleteTransaction";
 import Modal from "@/src/components/ui/modal";
-import DeleteTransaction from "../form/deleteTransaction";
 
 
 
 
 interface Props {
   allAccounts: Account[] | [];
-  accountData: Account;
+  accountData?: Account;
   updateTransaction: (data: {name: string, value: number, category: string, accountId: string, date: string}, id: string) => Promise<updateTransactionResponse | null>;
   deleteTransaction: (id: string) => Promise<boolean>;
 }
@@ -28,13 +29,20 @@ export default function TransactionModal({ allAccounts, accountData, updateTrans
 
   const renderComponent = () => {
     switch (modalData.action) {
+      case "add":
+        return (
+          <AddTransactionForm
+            allAccounts={allAccounts}
+            createTransaction={createTransaction}
+            setIsOpen={setIsOpen}
+          />
+        );
       case "edit":
         return (
           <UpdateTransactionForm 
-            allAccounts={allAccounts}
-            currentAccount={accountData}
-            updateTransaction={updateTransaction}
             transaction={modalData.transaction}
+            allAccounts={allAccounts}
+            updateTransaction={updateTransaction}
             setIsOpen={setIsOpen}
           />
         );

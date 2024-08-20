@@ -1,7 +1,8 @@
 "use client"
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table"
+import { Button } from "@/src/components/ui/button"
 
 
 
@@ -18,9 +19,13 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   })
 
+
+
   return (
+    <>
     <div className="rounded-md border">
       <Table>
         <TableHeader>
@@ -65,5 +70,25 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
+
+    {/* <div className="flex items-center justify-end gap-3 mt-4">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div> */}
+    </>
   )
 }

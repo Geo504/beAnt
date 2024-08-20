@@ -75,6 +75,14 @@ export const columns: ColumnDef<Transaction>[] = [
     },
   },
   {
+    accessorKey: "accountName",
+    header: "Account",
+    cell: ({ row }) => {
+      const accountName = row.original.account.name;
+      return <div>{accountName}</div>;
+    },
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
