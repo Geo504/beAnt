@@ -4,7 +4,7 @@ import { deleteTransactionById, getTransactionsById, updateTransaction } from "@
 import { Account } from "@/src/interfaces";
 
 import { columns } from "./columns";
-import { DataTable } from "../../../transactions/components/data-table";
+import { DataTable } from "../../../transactions/components/table/data-table";
 import TransactionModal from "@/src/app/user/accounts/transactions/components/transactionModal";
 
 

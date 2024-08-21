@@ -13,9 +13,9 @@ const menuItems = [
     title: 'Home',
     subtitle: [
       {name: 'Total Period Income', path: '/user/home'},
-      {name: 'Total Period Expenses', path: '/user/home/gfdg'},
-      {name: 'Total Balance', path: '/user/home/ghdhgd'},
-      {name: 'Monthly Expenses', path: '/user/home/hgdhgd'},
+      {name: 'Total Period Expenses', path: '/user/home'},
+      {name: 'Total Balance', path: '/user/home'},
+      {name: 'Monthly Expenses', path: '/user/home'},
     ],
     icon: <HomeSvg />,
   },
@@ -23,7 +23,7 @@ const menuItems = [
     title: 'Profile',
     subtitle: [
       {name: 'Profile Setup', path: '/user/profile'},
-      {name: 'Total Capital', path: '/user/profile/notfound'}
+      {name: 'Total Capital', path: '/user/profile'},
     ],
     icon: <ProfileSvg />,
   },
@@ -31,7 +31,7 @@ const menuItems = [
     title: 'Accounts',
     subtitle: [
       {name: 'Accounts', path: '/user/accounts'}, 
-      {name: 'Transactions History', path: '/user/accounts/transactions'}
+      {name: 'Transactions History', path: '/user/accounts/transactions'},
     ],
     icon: <AccountsSvg />,
   }

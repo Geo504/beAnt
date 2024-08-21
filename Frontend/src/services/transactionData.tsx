@@ -68,15 +68,18 @@ export type getTransactionsResponse = {
   limitPerPage: number;
   transactions: Transaction[];
 }
-export async function getTransactions(query?: { accountId?: string; name?: string }): Promise<getTransactionsByIdResponse | null> {
+export async function getTransactions(query?: { accountId?: string; search?: string; page?: string }): Promise<getTransactionsByIdResponse | null> {
   const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/account/transactions`);
 
-  if (query && (query.accountId || query.name)) {
+  if (query && (query.accountId || query.search || query.page)) {
     if (query.accountId) {
       url.searchParams.append('accountId', query.accountId);
     }
-    if (query.name) {
-      url.searchParams.append('name', query.name);
+    if (query.search) {
+      url.searchParams.append('search', query.search);
+    }
+    if (query.page) {
+      url.searchParams.append('page', query.page);
     }
   }
 

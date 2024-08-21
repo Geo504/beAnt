@@ -41,7 +41,7 @@ export default function SidebarMenuItem({ title, subtitle, icon }: Props) {
 
     <section className={`flex flex-col text-sm text-muted-foreground ps-8 overflow-hidden ${openTag === title ? 'max-h-[12rem] opacity-100' : 'max-h-0 opacity-0'} transition-all duration-200 ease-in-out`}>
       {subtitle.map( item => {
-        return <Link key={item.path} href={item.path} onClick={handleSidebarToggle} className="text-sm hover:text-primary">{item.name}</Link>
+        return <Link key={item.name} href={item.path} onClick={handleSidebarToggle} className="text-sm hover:text-primary">{item.name}</Link>
       })}
     </section>
     </>

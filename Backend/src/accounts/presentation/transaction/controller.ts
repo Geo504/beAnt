@@ -36,11 +36,11 @@ export class TransactionController {
   getAllTransactions = async (req: Request, res: Response) => {
     const userId = req.user!;
     
-    const { page=1, limit=10, name, accountId } = req.query;
+    const { page=1, limit=10, search, accountId } = req.query;
     const [error, paginationDto] = PaginationDto.create(+page, +limit);
     if (error) return res.status(400).json({ error });
 
-    const [errorQuery, getAllQueriesDto] = GetAllQueriesDto.create(name?.toString(), accountId?.toString());
+    const [errorQuery, getAllQueriesDto] = GetAllQueriesDto.create(search?.toString(), accountId?.toString());
     if (errorQuery) return res.status(400).json({ errorQuery });
 
     return new GetAllTransactions(this.transactionRepository)

@@ -54,7 +54,7 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
 
     type FilterType = {
       account: string | { $in: string[] };
-      name?: { $regex: RegExp };
+      $or?: { name?: { $regex: RegExp }; category?: { $regex: RegExp } }[];
     };
 
     async function getAccountIds(userId: string): Promise<string[]> {
@@ -68,8 +68,12 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
         ? { account: getAllQueriesDto.accountId }
         : { account: { $in: await getAccountIds(userId) } };
       
-      if (getAllQueriesDto?.name) {
-        filter.name = { $regex: new RegExp(getAllQueriesDto.name, 'i') };
+      if (getAllQueriesDto?.search) {
+        const searchRegex = { $regex: new RegExp(getAllQueriesDto.search, 'i') };
+        filter.$or = [
+          { name: searchRegex },
+          { category: searchRegex }
+        ];
       }
 
       const [transactions, total] = await Promise.all([

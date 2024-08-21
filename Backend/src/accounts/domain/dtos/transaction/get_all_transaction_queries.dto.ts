@@ -4,24 +4,25 @@ import { Validators } from "../../../../config";
 
 export class GetAllQueriesDto {
   private constructor(
-    public name?: string,
+    public search?: string,
     public accountId?: string,
   ) {}
 
-  static create(name?: string, accountId?: string): [string?, GetAllQueriesDto?] {
-    if (name) {
-      if (typeof name !== 'string') return ['invalid name'];
+  static create(search?: string, accountId?: string): [string?, GetAllQueriesDto?] {
+
+    if (search) {
+      if (typeof search !== 'string') return ['invalid name'];
     }
     if (accountId) {
       if (!Validators.isMongoID(accountId)) return ['invalid account id'];
     }
-    if (name === undefined && accountId === undefined) {
+    if (search === undefined && accountId === undefined) {
       return [undefined, undefined];
     }
 
     return [
       undefined,
-      new GetAllQueriesDto( name, accountId )
+      new GetAllQueriesDto( search, accountId )
     ]
   }
 }

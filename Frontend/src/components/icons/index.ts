@@ -27,6 +27,7 @@ export * from "./circle";
 export * from "./plusCircle";
 export * from "./minusCircle";
 export * from "./plus";
+export * from "./search";
 
 export * from "./home";
 export * from "./profile";
