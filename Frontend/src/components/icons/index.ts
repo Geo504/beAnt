@@ -19,7 +19,9 @@ export * from "./eyeOpen";
 export * from "./eyeClose";
 
 export * from "./arrowRight";
+export * from "./arrowRightDouble";
 export * from "./arrowLeft";
+export * from "./arrowLeftDouble";
 export * from "./arrowUp";
 export * from "./arrowDown";
 export * from "./check";

@@ -119,7 +119,25 @@ export class AuthDataSourceImpl<T> implements AuthDataSource<T> {
     try {
       const userProfile = await UserProfileModel.findOne({ user: userId })
         .populate('user', 'name email img');
-      if (!userProfile) throw CustomError.notFound('User not found');
+
+      if (!userProfile) {
+        const newUserProfile = new UserProfileModel({
+          user: userId,
+          lastName: '',
+          profession: '',
+          phone: '',
+        });
+
+        const createdUserProfile = await newUserProfile.save();
+
+        return {
+          user: createdUserProfile.user,
+          lastName: createdUserProfile.lastName ?? undefined,
+          profession: createdUserProfile.profession ?? undefined,
+          phone: createdUserProfile.phone ?? undefined,
+          birth: createdUserProfile.birth ?? undefined,
+        } as T;
+      };
 
       return {
         user: userProfile.user,

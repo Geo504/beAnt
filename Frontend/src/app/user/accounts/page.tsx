@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { deleteAccount, getAccount, getAllAccounts, updateAccount } from "@/src/services/accountData";
 import { createTransaction } from "@/src/services/transactionData";
@@ -7,6 +7,7 @@ import AllAccounts from "./components/header/allAccounts";
 import HeaderCurrentAccount from "./components/main/header";
 import AccountModal from "./components/accountModal";
 import TransactionTable from "./components/main/transactionTable/transactionTable";
+import NotFoundAccount from "./components/notFoundAccount";
 
 
 
@@ -26,9 +27,7 @@ export default async function AccountsPage({ searchParams }: any) {
     <AllAccounts allAccounts={allAccounts}/>
 
     {!accountData ? (
-      <div className="flex flex-col items-center justify-center min-h-96">
-        <h1 className="text-2xl font-bold">Account not found</h1>
-      </div>
+      <NotFoundAccount />
     ) : (
       <>
       <AccountModal

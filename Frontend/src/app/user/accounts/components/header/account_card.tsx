@@ -1,9 +1,10 @@
 "use client";
 import { toast } from "sonner";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { Account } from "@/src/interfaces";
 import { StarFillSvg, StarSvg } from "@/src/components/icons";
+import Link from "next/link";
 
 
 
@@ -15,19 +16,8 @@ interface Props {
 
 export default function AccountCard({ account, favoriteAccountId, updateFavoriteAccount }: Props) {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
   const currentAccountId = searchParams.get('id');
 
-
-
-  const handleCurrentAccount = (id: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (id) {
-      params.set('id', id);
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }
 
 
   const handleFavoriteAccount = async (accountId: string) => {
@@ -50,9 +40,9 @@ export default function AccountCard({ account, favoriteAccountId, updateFavorite
         {account.id === favoriteAccountId ? <StarFillSvg /> : <StarSvg />}
       </button>
 
-      <button
+      <Link 
+        href={`/user/accounts?id=${account.id}`}
         className={`px-4 py-2 flex flex-col justify-between h-full w-full text-left transition-all duration-300 hover:scale-[104%] ${account.id === currentAccountId ? 'bg-primarySoft text-primary-foreground' : 'bg-secondary text-primary'}`}
-        onClick={ () => handleCurrentAccount(account.id) }
       >
         <h3 className="mb-5 mt-1 mr-6 font-medium">{account.name}</h3>
 
@@ -66,7 +56,7 @@ export default function AccountCard({ account, favoriteAccountId, updateFavorite
             Members: {account.users.length}
           </p>
         </main>
-      </button>
+      </Link>
 
     </div>
   )

@@ -29,7 +29,7 @@ export default async function TransactionTable({ accountData, allAccounts }: Pro
     <section className="px-4 pb-4 pt-2 bg-primary-foreground rounded col-span-4 xl:col-span-3 xl:col-start-2">
       <header className="flex justify-between items-center mb-2 ">
         <h3 className="font-medium">Transaction History</h3>
-        <Link href="/user/accounts/transactions" className="text-muted-foreground text-sm hover:underline">
+        <Link href={`/user/accounts/transactions?accountId=${accountData.id}`} className="text-muted-foreground text-sm hover:underline">
           View more
         </Link>
       </header>

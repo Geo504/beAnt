@@ -95,6 +95,9 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
       };
 
     } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
       console.log(error);
       throw CustomError.internalServer();
     }

@@ -22,6 +22,7 @@ export default function SelectAccountBtn({ allAccounts }: Props) {
 
   const handleCurrentAccount = (accountId: string) => {
     const params = new URLSearchParams(searchParams);
+    params.delete('page');
 
     if (accountId) {
       params.set('accountId', accountId);
@@ -29,7 +30,6 @@ export default function SelectAccountBtn({ allAccounts }: Props) {
     if (accountId === 'allAccounts') {
       params.delete('accountId');
     }
-    params.set('page', '1');
     
     replace(`${pathname}?${params.toString()}`);
     refresh();
@@ -39,7 +39,7 @@ export default function SelectAccountBtn({ allAccounts }: Props) {
 
   return (
     <Select onValueChange={handleCurrentAccount} defaultValue={ searchParams.get('accountId') || 'allAccounts'}>
-      <SelectTrigger className="bg-transparent border-primary h-8 w-32 font-medium transition-all duration-300 hover:bg-secondary hover:shadow-md dark:hover:shadow-primary/50">
+      <SelectTrigger className="bg-transparent border-primary h-8 w-32 font-medium transition-all duration-300 hover:bg-secondary hover:shadow-md dark:hover:shadow-primary/30">
         <SelectValue />
       </SelectTrigger>
 

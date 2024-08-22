@@ -6,9 +6,6 @@ import { AccountDataSource, AccountEntity, CreateAccountDto, UpdateAccountDto } 
 
 
 export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
-  constructor(
-  
-  ) {}
 
   async createAccount(createAccountDto: CreateAccountDto, userId: string): Promise<AccountEntity> {
     const { name, balance, currency } = createAccountDto;
@@ -28,7 +25,10 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
 
       await UserModel.findByIdAndUpdate(
         userId,
-        { $push: { accounts: account._id } },
+        {
+          $push: { accounts: account._id },
+          ...(accountCount === 0 && { favoriteAccount: account._id })
+        },
         { new: true, safe: true, upsert: false }
       );
   

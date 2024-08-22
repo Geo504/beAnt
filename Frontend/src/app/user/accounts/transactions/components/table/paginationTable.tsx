@@ -1,9 +1,11 @@
 "use client"
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { Button } from "@/src/components/ui/button"
-import { ArrowLeftSvg, ArrowRightSvg } from "@/src/components/icons";
+import { ArrowLeftDoubleSvg, ArrowLeftSvg, ArrowRightDoubleSvg, ArrowRightSvg } from "@/src/components/icons";
 import next from "next";
+import Link from "next/link";
+import LinkButton from "@/src/components/ui/linkButton";
 
 
 
@@ -18,7 +20,6 @@ export default function PaginationTable({ totalItems, actualPage, totalPages, it
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace, refresh } = useRouter();
 
   const currentPage= Number(searchParams.get('page')) || actualPage;
 
@@ -27,7 +28,7 @@ export default function PaginationTable({ totalItems, actualPage, totalPages, it
 
     params.set('page', page.toString());
 
-    replace(`${pathname}?${params.toString()}`);
+    return `${pathname}?${params.toString()}`;
   }
 
 
@@ -39,27 +40,25 @@ export default function PaginationTable({ totalItems, actualPage, totalPages, it
       </div>
 
       <div className="flex gap-1">
-        <Button
-          variant="outline"
-          className="h-7 w-7 hover:shadow-md dark:hover:shadow-primary/50"
-          onClick={()=> createPageUrl(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
+        <LinkButton href={createPageUrl(1)} disabled={currentPage <= 1}>
+          <ArrowLeftDoubleSvg className="w-4 h-4" />
+        </LinkButton>
+
+        <LinkButton href={createPageUrl(currentPage - 1)} disabled={currentPage <= 1}>
           <ArrowLeftSvg className="w-4 h-4" />
-        </Button>
+        </LinkButton>
 
-        <Button variant="default" className="h-7 min-w-7">
+        <span className="inline-flex items-center justify-center h-7 min-w-7 rounded-md text-sm text-primary-foreground bg-primary font-medium">
           {currentPage}
-        </Button>
-
-        <Button
-          variant="outline" 
-          className="h-7 w-7 hover:shadow-md dark:hover:shadow-primary/50" 
-          onClick={()=> createPageUrl(currentPage + 1)}
-          disabled={currentPage >= totalPages}
-        >
+        </span>
+        
+        <LinkButton href={createPageUrl(currentPage + 1)} disabled={currentPage >= totalPages}>
           <ArrowRightSvg className="w-4 h-4" />
-        </Button>
+        </LinkButton>
+
+        <LinkButton href={createPageUrl(totalPages)} disabled={currentPage >= totalPages}>
+          <ArrowRightDoubleSvg className="w-4 h-4" />
+        </LinkButton>
       </div>
     </section>
   )

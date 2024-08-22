@@ -1,7 +1,6 @@
 import { Account } from '@/src/interfaces';
 
 import SelectAccountBtn from './selectAccountBtn';
-import NewTransactionBtn from './newTransactionBtn';
 
 
 
@@ -20,7 +19,6 @@ export default function HeaderTransactionHistory({ allAccounts }: Props) {
 
       <div className='flex gap-2'>
         <SelectAccountBtn allAccounts={allAccounts} />
-        <NewTransactionBtn />
       </div>
       
     </header>

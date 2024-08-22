@@ -7,12 +7,18 @@ import TransactionModal from "./components/transactionModal";
 import HeaderTransactionHistory from "./components/header/headerTransactionHistory";
 import HeaderTable from "./components/table/headerTable";
 import PaginationTable from "./components/table/paginationTable";
+import { notFound } from "next/navigation";
 
 
 
 export default async function TransactionsPage({ searchParams }: any) {
   const transactions = await getTransactions(searchParams);
   const allAccounts = await getAllAccounts();
+
+
+  if (allAccounts?.accounts.length === 0) {
+    return notFound();
+  }
 
 
 
