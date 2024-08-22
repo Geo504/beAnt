@@ -16,7 +16,7 @@ export default async function TransactionsPage({ searchParams }: any) {
   const allAccounts = await getAllAccounts();
 
 
-  if (allAccounts?.accounts.length === 0) {
+  if (allAccounts?.accounts.length === 0 || !transactions) {
     return notFound();
   }
 
