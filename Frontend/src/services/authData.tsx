@@ -147,3 +147,25 @@ export async function updateUser(data: UpdateProfileResponse): Promise<UpdatePro
   revalidatePath('/user/profile');
   return res.json();
 }
+
+
+
+export async function updateProfileImage(data: FormData): Promise<{url: string} | ErrorResponse> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/profile_image`, {
+    method: "POST",
+    headers: {Cookie: cookies().toString()},
+    body: data,
+  });
+
+  
+  if (res.status === 400) {
+    const error = await res.json();
+    return {errorMessage: error.error};
+  }
+  if (!res.ok) {
+    return {errorMessage: 'Error updating image. Please try again.'};
+  }
+
+  revalidatePath('/user/profile');
+  return res.json();
+}

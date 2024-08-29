@@ -1,8 +1,8 @@
-import { JwtAdapter } from "../../../config";
+import { JwtAdapter } from "../../../../config";
 
-import { AuthRepository } from "../repositories/auth.repository";
-import { LoginUserDto } from "../dtos/login_user.dto";
-import { CustomError } from "../errors/custom.error";
+import { AuthRepository } from "../../repositories/auth.repository";
+import { LoginUserDto } from "../../dtos/login_user.dto";
+import { CustomError } from "../../errors/custom.error";
 
 
 
@@ -26,7 +26,7 @@ interface LoginUserUseCase {
 
 export class LoginUser implements LoginUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository<UserToken>,
+    private readonly authRepository: AuthRepository,
     private readonly signToken: SignToken = JwtAdapter.generateToken,
   ){}
 

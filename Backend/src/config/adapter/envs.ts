@@ -18,4 +18,9 @@ export const envs = {
   EMAIL_PASSWORD: get('EMAIL_PASSWORD').required().asString(),
 
   JWT_SEED: get('JWT_SEED').required().asString(),
+
+  AWS_BUCKET_NAME: get('AWS_BUCKET_NAME').required().asString(),
+  AWS_BUCKET_REGION: get('AWS_BUCKET_REGION').required().asString(),
+  AWS_ACCESS_KEY: get('AWS_ACCESS_KEY').required().asString(),
+  AWS_SECRET_KEY: get('AWS_SECRET_KEY').required().asString(),
 }

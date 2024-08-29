@@ -1,8 +1,8 @@
-import { EmailService, JwtAdapter, envs } from "../../../config";
+import { EmailService, JwtAdapter, envs } from "../../../../config";
 
-import { AuthRepository } from "../repositories/auth.repository";
-import { RegisterUserDto } from "../dtos/register_user.dto";
-import { CustomError } from "../errors/custom.error";
+import { AuthRepository } from "../../repositories/auth.repository";
+import { RegisterUserDto } from "../../dtos/register_user.dto";
+import { CustomError } from "../../errors/custom.error";
 
 
 
@@ -22,7 +22,7 @@ interface RegisterUserUseCase {
 
 export class RegisterUser implements RegisterUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository<User>,
+    private readonly authRepository: AuthRepository,
     private readonly emailService: EmailService = new EmailService(
       envs.EMAIL_SERVICE,
       envs.EMAIL_NAME,

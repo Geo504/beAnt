@@ -1,7 +1,7 @@
-import { JwtAdapter } from "../../../config";
+import { JwtAdapter } from "../../../../config";
 
-import { CustomError } from "../errors/custom.error";
-import { AuthRepository } from "../repositories/auth.repository";
+import { CustomError } from "../../errors/custom.error";
+import { AuthRepository } from "../../repositories/auth.repository";
 
 
 
@@ -12,7 +12,7 @@ interface ValidateEmailUseCase {
 
 export class ValidateEmail implements ValidateEmailUseCase {
   constructor(
-    private readonly authRepository: AuthRepository<boolean>,
+    private readonly authRepository: AuthRepository,
   ){}
   
   async execute(token: string): Promise<boolean> {

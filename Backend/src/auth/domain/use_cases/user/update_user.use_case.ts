@@ -1,5 +1,6 @@
-import { AuthRepository } from "../repositories/auth.repository";
-import { UpdateUserDto } from "../dtos/update_user.dto";
+import { UserProfileRepository } from "../../repositories/userProfile.repository";
+import { UpdateUserDto } from "../../dtos/update_user.dto";
+
 
 
 interface UserProfileResponse {
@@ -18,12 +19,12 @@ interface UpdateUserUseCase {
 
 export class UpdateUser implements UpdateUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository<UserProfileResponse>,
+    private readonly userProfileRepository: UserProfileRepository<UserProfileResponse>,
   ){}
 
   async execute(updateUserDto: UpdateUserDto, userId: string): Promise<UserProfileResponse> {
     // Update user profile
-    const userProfile = await this.authRepository.updateUser(updateUserDto, userId);
+    const userProfile = await this.userProfileRepository.updateUser(updateUserDto, userId);
 
     return {
       name: userProfile.name,

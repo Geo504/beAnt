@@ -1,4 +1,4 @@
-import { AuthRepository } from "../repositories/auth.repository";
+import { UserProfileRepository } from "../../repositories/userProfile.repository";
 
 
 
@@ -15,12 +15,12 @@ interface GetUserUseCase {
 
 export class GetUser implements GetUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository<UserProfile>,
+    private readonly userProfileRepository: UserProfileRepository<UserProfile>,
   ){}
 
   async execute(userId: string): Promise<UserProfile> {
     // Get user
-    const user = await this.authRepository.getUser(userId);
+    const user = await this.userProfileRepository.getUser(userId);
 
     return {
       id: user.id,

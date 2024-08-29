@@ -1,5 +1,6 @@
-import { AuthRepository } from "../repositories/auth.repository";
-import { UserEntity } from "../entities/user.entities";
+import { UserProfileRepository } from "../../repositories/userProfile.repository";
+
+import { UserEntity } from "../../entities/user.entities";
 
 
 
@@ -17,12 +18,12 @@ interface GetUserProfileUseCase {
 
 export class GetUserProfile implements GetUserProfileUseCase {
   constructor(
-    private readonly authRepository: AuthRepository<UserProfileResponse>,
+    private readonly userProfileRepository: UserProfileRepository<UserProfileResponse>,
   ){}
 
   async execute(userId: string): Promise<UserProfileResponse> {
     // Get user
-    const userProfile = await this.authRepository.getUserProfile(userId);
+    const userProfile = await this.userProfileRepository.getUserProfile(userId);
 
     return {
       user: userProfile.user,

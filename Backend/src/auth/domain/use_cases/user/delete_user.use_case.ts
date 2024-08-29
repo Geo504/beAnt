@@ -1,4 +1,4 @@
-import { AuthRepository } from "../repositories/auth.repository";
+import { UserProfileRepository } from "../../repositories/userProfile.repository";
 
 
 
@@ -10,12 +10,12 @@ interface DeleteUserUseCase {
 
 export class DeleteUser implements DeleteUserUseCase {
   constructor(
-    private readonly authRepository: AuthRepository<boolean>,
+    private readonly userProfileRepository: UserProfileRepository<boolean>,
   ){}
 
   async execute(userId: string): Promise<boolean> {
     // Delete user
-    await this.authRepository.deleteUser(userId);
+    await this.userProfileRepository.deleteUser(userId);
 
     return true;
   }

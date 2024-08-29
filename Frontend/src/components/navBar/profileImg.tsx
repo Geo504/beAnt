@@ -20,9 +20,10 @@ export default function ProfileImg({user, logoutUser }: Props) {
 
   const currentPath = usePathname();
   const router = useRouter();
-  
-  const firstLetter = user ? user.name.charAt(0).toUpperCase() : 'BA';
-  
+
+  const sourceImage = user?.img || '';
+  const firstLetter = user?.name.charAt(0).toUpperCase() || 'BA';
+
 
 
   return (
@@ -32,7 +33,7 @@ export default function ProfileImg({user, logoutUser }: Props) {
       <DropdownMenuTrigger className={`${!currentPath.startsWith('/user') && 'hidden'}`} asChild>
         <button className="rounded-full" type="button">
           <Avatar>
-            <AvatarImage src={ user && user.img ? user.img : '' } alt="profile pic"/>
+            <AvatarImage src={ sourceImage } alt="profile pic"/>
             <AvatarFallback>{firstLetter}</AvatarFallback>
           </Avatar>
         </button>

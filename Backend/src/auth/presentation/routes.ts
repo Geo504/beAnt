@@ -3,6 +3,7 @@ import { Router } from "express";
 import { AuthController } from "./controller";
 import { AuthDataSourceImpl, AuthRepositoryImpl } from "../infrastructure";
 import { AuthMiddleware } from "./middlewares/auth.middleware";
+import { UserProfileRoutes } from "./user/routes";
 
 
 
@@ -16,17 +17,13 @@ export class AuthRoutes {
 
     const controller = new AuthController(authRepository);
 
-
+    
+    router.use('/user', AuthMiddleware.validateJWT, UserProfileRoutes.routes)
 
     router.post('/register', controller.registerUser);
     router.post('/login', controller.loginUser);
-
     router.get('/validate-email/:token', controller.validateEmail);
 
-    router.get('/user', AuthMiddleware.validateJWT, controller.getUser);
-    router.get('/user/profile', AuthMiddleware.validateJWT, controller.getUserProfile);
-    router.put('/user', AuthMiddleware.validateJWT, controller.updateUser);
-    router.delete('/user', AuthMiddleware.validateJWT, controller.deleteUser);
 
     
     return router;
