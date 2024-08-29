@@ -1,7 +1,8 @@
 "use client"
-
+import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { useNavbarStore } from "@/src/store/navbar";
 import LogoutButton from "./logout-btn";
 import { User } from "@/src/interfaces";
 
@@ -17,11 +18,14 @@ interface Props {
 }
 
 export default function ProfileImg({user, logoutUser }: Props) {
-
+  const { profileUrlImage, setProfileUrlImage } = useNavbarStore();
   const currentPath = usePathname();
   const router = useRouter();
 
-  const sourceImage = user?.img || '';
+  useEffect(() => {
+    if (user?.img) setProfileUrlImage(user.img);
+  }, []);
+
   const firstLetter = user?.name.charAt(0).toUpperCase() || 'BA';
 
 
@@ -33,7 +37,7 @@ export default function ProfileImg({user, logoutUser }: Props) {
       <DropdownMenuTrigger className={`${!currentPath.startsWith('/user') && 'hidden'}`} asChild>
         <button className="rounded-full" type="button">
           <Avatar>
-            <AvatarImage src={ sourceImage } alt="profile pic"/>
+            <AvatarImage src={ profileUrlImage } alt="profile pic"/>
             <AvatarFallback>{firstLetter}</AvatarFallback>
           </Avatar>
         </button>

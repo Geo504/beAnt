@@ -1,5 +1,6 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { UploadedFile } from 'express-fileupload';
+import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -36,8 +37,13 @@ export class FileUploaderService {
 
   async uploadFile(file: UploadedFile, url?: string) {
     const fileName = this.handleImageName(url);
-    const fileRoute = `users/${fileName}`;
-    const buffer = Buffer.from(file.data);
+    const fileRoute = `users/profile/${fileName}`;
+
+    const buffer = await sharp(file.data)
+      .resize(600, 600, { fit: 'cover', withoutEnlargement: true })
+      .withMetadata()
+      .jpeg({ quality: 70 })
+      .toBuffer();
 
     const params = {
       Bucket: this.bucketName,

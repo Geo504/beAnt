@@ -166,6 +166,5 @@ export async function updateProfileImage(data: FormData): Promise<{url: string} 
     return {errorMessage: 'Error updating image. Please try again.'};
   }
 
-  revalidatePath('/user/profile');
   return res.json();
 }

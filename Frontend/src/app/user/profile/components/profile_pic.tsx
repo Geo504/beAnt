@@ -1,8 +1,10 @@
 "use client";
 import { toast } from "sonner";
 
-import { CameraSvg } from "@/src/components/icons";
+import { useNavbarStore } from "@/src/store/navbar";
 import { GetProfileResponse, updateProfileImage } from "@/src/services/authData";
+
+import { CameraSvg } from "@/src/components/icons";
 
 
 
@@ -10,9 +12,11 @@ interface Props {
   profileData: GetProfileResponse | null;
 }
 
-export default function ProfilePic({ profileData }: Props) {
-  const imageUrl = profileData?.user.img || "https://beant.s3.eu-west-3.amazonaws.com/web_images/default_avatar.jpg";
 
+
+export default function ProfilePic({ profileData }: Props) {
+
+  const { profileUrlImage, setProfileUrlImage } = useNavbarStore();
 
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +32,7 @@ export default function ProfilePic({ profileData }: Props) {
         return toast.error(resp.errorMessage);
       }
       toast.success('Profile picture updated');
+      setProfileUrlImage(`${resp.url}?`);
       
     } catch (error) {
       toast.error('Error updating profile picture');
@@ -41,7 +46,7 @@ export default function ProfilePic({ profileData }: Props) {
   return (
     <>
     <div className="relative">
-      <img src={imageUrl} alt="profile" className="rounded-full aspect-square h-40 object-cover" />
+      <img src={profileUrlImage || "https://beant.s3.eu-west-3.amazonaws.com/web_images/default_avatar.jpg"} alt="profile" className="rounded-full aspect-square h-40 object-cover" />
 
       <label htmlFor="profile_picture" className="cursor-pointer p-2 bg-primary text-primary-foreground rounded-full border-2 border-primary-foreground absolute right-0 bottom-0 hover:bg-primarySoft transition-colors duration-150">
         <CameraSvg />
