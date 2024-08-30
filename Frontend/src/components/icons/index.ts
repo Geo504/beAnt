@@ -45,6 +45,7 @@ export * from "./calendar";
 export * from "./editPencil";
 export * from "./trash";
 export * from "./creditCardPlus";
+export * from "./addUser";
 
 export * from "./basicService";
 export * from "./education";

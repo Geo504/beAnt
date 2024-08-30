@@ -22,6 +22,12 @@ export const  accountModalConfig = {
     title: "Add Transaction",
     description: "Add a new transaction to one account",
   } as ModalData,
+  addUser: {
+    action: "inviteUser",
+    position: "right",
+    title: "Invite Friend",
+    description: "Invite a new user to one account for split expenses",
+  } as ModalData,
   delete: {
     action: "delete",
     position: "center",

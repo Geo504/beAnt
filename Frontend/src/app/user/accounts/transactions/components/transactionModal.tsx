@@ -14,14 +14,13 @@ import Modal from "@/src/components/ui/modal";
 
 interface Props {
   allAccounts: Account[] | [];
-  accountData?: Account;
   updateTransaction: (data: {name: string, value: number, category: string, accountId: string, date: string}, id: string) => Promise<updateTransactionResponse | null>;
   deleteTransaction: (id: string) => Promise<boolean>;
 }
 
 
 
-export default function TransactionModal({ allAccounts, accountData, updateTransaction, deleteTransaction }: Props) {
+export default function TransactionModal({ allAccounts, updateTransaction, deleteTransaction }: Props) {
 
   const { isOpen, setIsOpen, modalData } = useTransactionModalStore();
 

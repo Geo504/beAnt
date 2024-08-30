@@ -253,7 +253,7 @@ export default function AddTransactionForm({ allAccounts, currentAccount, setIsO
                         This will count as an {isNegative ? "expense" : "income"}.
                       </FormDescription>
                     )}
-                    <span className="absolute right-0 top-1 opacity-50 border-l border-muted-foreground w-10 text-center">
+                    <span className="absolute right-0 top-1 opacity-50 border-l border-muted-foreground w-7 text-center">
                       {currency}
                     </span>
                     <button

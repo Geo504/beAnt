@@ -7,6 +7,7 @@ import { UpdateAccountResponse } from "@/src/services/accountData";
 
 import DeleteAccount from "./main/form/deleteAccount";
 import UpdateAccountForm from "./main/form/updateAccountForm";
+import InviteUserForm from "./main/form/inviteUserForm";
 import AddTransactionForm from "@/src/app/user/accounts/transactions/components/form/addTransactionForm";
 import Modal from "@/src/components/ui/modal";
 
@@ -45,6 +46,14 @@ export default function AccountModal({ accountData, updateAccount, deleteAccount
             allAccounts={allAccounts}
             currentAccount={accountData}
             createTransaction={createTransaction}
+            setIsOpen={setIsOpen}
+          />
+        );
+      case "inviteUser":
+        return (
+          <InviteUserForm
+            allAccounts={allAccounts}
+            currentAccount={accountData}
             setIsOpen={setIsOpen}
           />
         );

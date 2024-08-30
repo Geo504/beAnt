@@ -3,7 +3,7 @@ import { accountModalConfig, useAccountModalStore } from "@/src/store/accountMod
 
 import { Button } from "@/src/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/src/components/ui/dropdown-menu";
-import { CreditCardPlusSvg, EditPencilSvg, OptionSvg, TrashSvg } from "@/src/components/icons";
+import { AddUserSvg, CreditCardPlusSvg, EditPencilSvg, OptionSvg, TrashSvg } from "@/src/components/icons";
 
 
 
@@ -24,8 +24,13 @@ export default function OptionAccount({ accountName }: Props) {
     },
     {
       icon: <CreditCardPlusSvg className="mr-2 h-4 w-4" />,
-      text: "Add transaction",
+      text: "Add Transaction",
       action: accountModalConfig.addTransaction,
+    },
+    {
+      icon: <AddUserSvg className="mr-2 h-4 w-4" />,
+      text: "Invite Friend",
+      action: accountModalConfig.addUser,
     },
     {
       icon: <TrashSvg className="mr-2 h-4 w-4" />,

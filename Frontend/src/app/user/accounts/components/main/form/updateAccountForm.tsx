@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { UpdateAccountResponse } from "@/src/services/accountData";
-import { Account, ErrorResponse } from "@/src/interfaces";
+import { Account } from "@/src/interfaces";
 
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select";
-import { toast } from "sonner";
 
 
 
