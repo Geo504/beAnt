@@ -31,7 +31,7 @@ export default async function Navbar() {
 
         <div className="flex gap-2">
           <ModeToggle />
-          <ProfileImg user={userData} logoutUser={logoutUser}/>
+          {userData && <ProfileImg user={userData} logoutUser={logoutUser}/>}
         </div>
 
       </nav>

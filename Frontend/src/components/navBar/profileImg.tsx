@@ -13,7 +13,7 @@ import { GearSvg, ProfileSvg } from "../icons";
 
 
 interface Props {
-  user: User | null; 
+  user: User; 
   logoutUser: () => Promise<boolean>;
 }
 
@@ -23,10 +23,10 @@ export default function ProfileImg({user, logoutUser }: Props) {
   const router = useRouter();
 
   useEffect(() => {
-    if (user?.img) setProfileUrlImage(user.img);
+    if (user.img) setProfileUrlImage(user.img);
   }, []);
 
-  const firstLetter = user?.name.charAt(0).toUpperCase() || 'BA';
+  const firstLetter = user.name.charAt(0).toUpperCase();
 
 
 
@@ -35,7 +35,7 @@ export default function ProfileImg({user, logoutUser }: Props) {
     <DropdownMenu>
 
       <DropdownMenuTrigger className={`${!currentPath.startsWith('/user') && 'hidden'}`} asChild>
-        <button className="rounded-full" type="button">
+        <button className="rounded-full transition-shadow duration-300 hover:shadow-md hover:bg-secondary dark:hover:shadow-primary/30" type="button">
           <Avatar>
             <AvatarImage src={ profileUrlImage } alt="profile pic"/>
             <AvatarFallback>{firstLetter}</AvatarFallback>
