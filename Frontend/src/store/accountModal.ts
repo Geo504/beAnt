@@ -26,7 +26,7 @@ export const  accountModalConfig = {
     action: "inviteUser",
     position: "right",
     title: "Invite Friend",
-    description: "Invite a new user to one account for split expenses",
+    description: "Invite others users to one account for split expenses",
   } as ModalData,
   delete: {
     action: "delete",
