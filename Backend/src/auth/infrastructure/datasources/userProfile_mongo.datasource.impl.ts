@@ -1,4 +1,6 @@
-import { AccountModel, TransactionModel, UserModel, UserProfileModel } from "../../../data";
+import mongoose from "mongoose";
+
+import { AccountModel, TransactionModel, UserModel, UserProfileModel, UsersAccountsModel } from "../../../data";
 
 import { CustomError, ProfileEntity, UpdateUserDto, UserEntity, UserProfileDataSource } from "../../domain";
 
@@ -140,16 +142,27 @@ export class UserProfileDataSourceImpl<T> implements UserProfileDataSource<T> {
 
   async deleteUser(userId: string): Promise<boolean> {
     try {
-      const accounts = await AccountModel.find({ users: userId }).select('_id');
+      const accounts = await UsersAccountsModel.aggregate([
+        { $match: { user: new mongoose.Types.ObjectId(userId), role: 'admin' } },
+        {
+          $group: {
+            _id: '$account',
+            userCount: { $sum: 1 }
+          }
+        },
+        { $match: { userCount: 1 } },
+        { $project: { id: '$_id' } }
+      ]);
 
       // Delete user accounts & transactions
       if (accounts.length > 0) {
-        const accountIds = accounts.map(account => account._id);
+        const accountIds = accounts.map(account => account.id);
 
         const deleteTransactions = TransactionModel.deleteMany({ account: { $in: accountIds } });
         const deleteAccounts = AccountModel.deleteMany({ _id: { $in: accountIds } });
+        const deleteProfile = UserProfileModel.deleteOne({ user: userId });
         
-        await Promise.all([deleteTransactions, deleteAccounts]);
+        await Promise.all([deleteTransactions, deleteAccounts, deleteProfile]);
       }
 
 

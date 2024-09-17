@@ -1,4 +1,4 @@
-import { AccountModel, TransactionModel } from "../../../data";
+import { AccountModel, TransactionModel, UsersAccountsModel } from "../../../data";
 
 import { CustomError } from "../../../auth/domain";
 import { CreateTransactionDto, GetAllQueriesDto, PaginationDto, TransactionDataSource, TransactionEntity, UpdateTransactionDto } from "../../domain";
@@ -12,10 +12,12 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
     const { name, value, category, accountId, date } = createTransactionDto;
 
     try {
-      const account = await AccountModel.findOne({ _id: accountId, users: userId });
+      const account = await UsersAccountsModel.findOne({ account: accountId, user: userId })
+        .select('account')
+        .populate<{account: {balance: number}}>('account', 'balance');
       if (!account) throw CustomError.notFound('Account not found');
 
-      const newBalance = +(account.balance + value).toFixed(2);
+      const newBalance = +(account.account.balance + value).toFixed(2);
       
       const transaction = new TransactionModel({
         name: name,
@@ -30,7 +32,7 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
       await transaction.save();
       
       await AccountModel.findOneAndUpdate(
-        { _id: accountId , users: userId},
+        { _id: accountId },
         { $set: { balance: newBalance }, $push: { transactions: transaction._id } },
         { new: true }
       );
@@ -52,21 +54,21 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
   async getAllTransactions(paginationDto: PaginationDto, userId: string, getAllQueriesDto?: GetAllQueriesDto ): Promise<object> {
     const { page, limit } = paginationDto;
 
-    type FilterType = {
-      account: string | { $in: string[] };
-      $or?: { name?: { $regex: RegExp }; category?: { $regex: RegExp } }[];
-    };
-
-    async function getAccountIds(userId: string): Promise<string[]> {
-      const accounts = await AccountModel.find({ users: userId }).select('_id');
-      if (!accounts || accounts.length === 0) throw CustomError.notFound('Accounts not found');
-      return accounts.map(account => account._id.toString());
+    async function getFilter(userId: string, accountId?: string): Promise<any> {
+      const accounts = await UsersAccountsModel.find({ user: userId }).select('account');
+      if (!accounts.length) throw CustomError.notFound('Accounts not found');
+      const accountIds = accounts.map(account => account.account.toString())
+    
+      if (accountId && !accountIds.includes(accountId)) {
+        throw CustomError.notFound('Account not found');
+      }
+    
+      return { account: accountId || { $in: accountIds } };
     }
 
+
     try {
-      let filter:FilterType  = getAllQueriesDto?.accountId
-        ? { account: getAllQueriesDto.accountId }
-        : { account: { $in: await getAccountIds(userId) } };
+      let filter = await getFilter(userId, getAllQueriesDto?.accountId);
       
       if (getAllQueriesDto?.search) {
         const searchRegex = { $regex: new RegExp(getAllQueriesDto.search, 'i') };
@@ -79,7 +81,8 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
       const [transactions, total] = await Promise.all([
         TransactionModel.find(filter)
           .populate('account', 'name currency')
-          .populate('user', 'name')
+          .populate('user', 'name img email')
+          .select('-createdAt')
           .sort({ date: -1 })
           .skip((page - 1) * limit)
           .limit(limit),
@@ -107,14 +110,15 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
 
   async getTransactionById(transactionId: string, userId: string): Promise<object> {
     try {
-      const accounts = await AccountModel.find({ users: userId }).select('_id');
-      if (!accounts) throw CustomError.notFound('Accounts not found');
+      const accounts = await UsersAccountsModel.find({ user: userId }).select('account');
+      if (!accounts.length) throw CustomError.notFound('Accounts not found');
 
-      const accountIds = accounts.map(account => account._id);
+      const accountIds = accounts.map(account => account.account);
 
       const transaction = await TransactionModel.findOne({ _id: transactionId, account: { $in: accountIds } })
         .populate('account', 'name currency')
-        .populate('user', 'name');
+        .populate('user', 'name img email')
+        .select('-createdAt');
       if (!transaction) throw CustomError.notFound('Transaction not found');
 
       return transaction;
@@ -139,13 +143,17 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
 
       // Check if account change is needed
       if (accountId && accountId !== oldTransaction.account.toString()) {
-        const accounts = await AccountModel.find({ _id: { $in: [accountId, oldTransaction.account] }, users: userId }, { balance: 1 });
+        const accounts = await UsersAccountsModel.find({
+          user: userId,
+          account: { $in: [accountId, oldTransaction.account] }
+        }).select('account').populate('account', 'balance');
+
         
-        const accountsMap = new Map(accounts.map(acc => [acc._id.toString(), acc]));
+        const accountsMap = new Map(accounts.map(acc => [acc.account._id.toString(), acc.account as any]));
         const account = accountsMap.get(accountId);
         const oldAccount = accountsMap.get(oldTransaction.account.toString());
         if (!account || !oldAccount) throw CustomError.notFound('Account not found');
-
+        
         const oldValue = +oldTransaction.value.toFixed(2);
         const newValue = updateData.value ? +updateData.value.toFixed(2) : oldValue;
 
@@ -163,19 +171,23 @@ export class TransactionMongoDataSourceImpl implements TransactionDataSource {
           }}
         ]);
       } 
+
       // Update balance if only the value has changed
       else if (updateData.value && (accountId === oldTransaction.account.toString() || !accountId)) {
-        const account = await AccountModel.findOne({ _id: oldTransaction.account, users: userId });
+        const account: any = await UsersAccountsModel.findOne({ user: userId, account: oldTransaction.account })
+          .select('account')
+          .populate('account', 'balance');
         if (!account) throw CustomError.notFound('Account not found');
 
         const balanceChange = +(updateData.value - oldTransaction.value).toFixed(2);
-        const newBalance = (account.balance + balanceChange).toFixed(2);
+        const newBalance = (account.account.balance + balanceChange).toFixed(2);
         
         await AccountModel.updateOne(
           { _id: oldTransaction.account },
           { $set: { balance: newBalance } }
         );
       }
+
       // Update the transaction
       const updatedTransaction = await TransactionModel.findOneAndUpdate(
         { _id: transactionId },

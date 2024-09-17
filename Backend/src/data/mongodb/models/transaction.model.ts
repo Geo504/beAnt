@@ -29,7 +29,11 @@ const transactionSchema = new Schema({
     type: String,
     required: [true, 'Status is required'],
     default: 'pending',
-    enum: ['pending', 'send', 'paid', 'rejected', 'canceled']
+    enum: ['pending', 'sent', 'paid', 'rejected', 'canceled']
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   },
 
   user: {

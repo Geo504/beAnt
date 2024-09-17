@@ -22,10 +22,14 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 
   accounts: [{
     type: Schema.Types.ObjectId,
-    ref: 'Account'
+    ref: 'UsersAccount',
   }],
   favoriteAccount: {
     type: Schema.Types.ObjectId,

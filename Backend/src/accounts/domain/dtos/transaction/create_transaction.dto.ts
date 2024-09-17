@@ -12,7 +12,7 @@ export class CreateTransactionDto {
   ) {}
 
   static create(object: {[key: string]: any}): [string?, CreateTransactionDto?] {
-    let { name, value, category, accountId, date=new Date(), ...extraKeys } = object;
+    let { name, value, category, accountId, date, ...extraKeys } = object;
     
 
     const extraKeysArray = Object.keys(extraKeys);
@@ -33,7 +33,9 @@ export class CreateTransactionDto {
     if (!accountId) return ['Account id invalid'];
     if (!Validators.isMongoID(accountId)) return ['Account id invalid'];
 
-    if (date) {
+    if (!date) {
+      date = new Date();
+    } else {
       if (!Validators.date.test(date)) return ['date is invalid'];
       date = new Date(date);
     }

@@ -14,6 +14,10 @@ const userProfileSchema = new Schema({
   birth: {
     type: Date,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 
   user: {
     type: Schema.Types.ObjectId,
