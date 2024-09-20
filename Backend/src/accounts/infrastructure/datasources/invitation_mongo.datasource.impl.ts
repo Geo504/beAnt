@@ -15,14 +15,19 @@ export class InvitationMongoDataSourceImpl implements InvitationDataSource {
     const { guest, role, accountId } = createInvitationDto;
 
     try {
-      const userGuest = await UserModel.findOne({ email: guest }).select('_id');
+      const [userGuest, account] = await Promise.all([
+        UserModel.findOne({ email: guest }).select('_id'),
+        UsersAccountsModel.exists({ user: userId, account: accountId, role: 'admin' })
+      ]);
       if (!userGuest) throw CustomError.notFound('Guest not found');
-
-      const account = await UsersAccountsModel.exists({ user: userId, account: accountId, role: 'admin' });
       if (!account) throw CustomError.notFound('Account not found or unauthorized');
 
-      const existingInvitation = await InvitationsAccountModel.exists({ guest: userGuest._id, account: accountId });
+      const [existingInvitation, existingUserAccount] = await Promise.all([
+        InvitationsAccountModel.exists({ guest: userGuest._id, account: accountId }),
+        UsersAccountsModel.exists({ user: userGuest._id, account: accountId })
+      ]);
       if (existingInvitation) throw CustomError.forbidden('Invitation already exists');
+      if (existingUserAccount) throw CustomError.forbidden('User already belongs to the account');
 
       const newInvitation = new InvitationsAccountModel({
         sender: userId,
@@ -56,7 +61,8 @@ export class InvitationMongoDataSourceImpl implements InvitationDataSource {
     try {
       const invitations = await InvitationsAccountModel.find({ guest: userId })
         .populate({ path: 'sender', select: 'name email img -_id' })
-        .populate({ path: 'account', select: 'name -_id' });
+        .populate({ path: 'account', select: 'name -_id' })
+        .sort({ createdAt: -1 });
 
       return invitations.map(InvitationEntity.fromObject);
 
@@ -72,7 +78,8 @@ export class InvitationMongoDataSourceImpl implements InvitationDataSource {
     try {
       const invitations = await InvitationsAccountModel.find({ sender: userId })
         .populate({ path: 'guest', select: 'name email img -_id' })
-        .populate({ path: 'account', select: 'name -_id' });
+        .populate({ path: 'account', select: 'name -_id' })
+        .sort({ createdAt: -1 });
 
       return invitations.map(InvitationEntity.fromObject);
 
