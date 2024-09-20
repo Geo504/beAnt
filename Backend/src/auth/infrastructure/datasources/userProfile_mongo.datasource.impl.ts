@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import { AccountModel, TransactionModel, UserModel, UserProfileModel, UsersAccountsModel } from "../../../data";
+import {  AccountModel, InvitationsAccountModel, TransactionModel, UserModel, UserProfileModel, UsersAccountsModel } from "../../../data";
 
 import { CustomError, ProfileEntity, UpdateUserDto, UserEntity, UserProfileDataSource } from "../../domain";
 
@@ -165,9 +165,10 @@ export class UserProfileDataSourceImpl<T> implements UserProfileDataSource<T> {
         await Promise.all([deleteTransactions, deleteAccounts, deleteProfile]);
       }
 
-
-      const user = await UserModel.findByIdAndDelete(userId);
-      if (!user) throw CustomError.notFound('User not found');
+      await Promise.all([
+        InvitationsAccountModel.deleteMany({ $or: [{ user: userId }, { guest: userId }] }),
+        UserModel.findByIdAndDelete(userId),
+      ]);
 
       return true;
 

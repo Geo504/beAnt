@@ -6,4 +6,4 @@ export * from "./mongodb/models/account.model";
 export * from "./mongodb/models/users_accounts.model";
 export * from "./mongodb/models/transaction.model";
 
-// export * from "./mongodb/models/invitations_account";
+export * from "./mongodb/models/invitations_account";

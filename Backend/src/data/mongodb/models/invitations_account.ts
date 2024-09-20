@@ -28,7 +28,6 @@ const invitationsAccountSchema = new Schema({
 });
 
 invitationsAccountSchema.set('toJSON', {
-  virtuals: true,
   versionKey: false,
   transform: function (_doc, ret, _options) {
     delete ret._id;

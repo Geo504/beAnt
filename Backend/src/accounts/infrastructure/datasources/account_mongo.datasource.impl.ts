@@ -62,49 +62,69 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
     try {
       const [accounts, user] = await Promise.all([
         AccountModel.aggregate([
-          {
-            $lookup: {
-              from: 'usersaccounts',
-              let: { accountId: '$_id' },
-              pipeline: [
-                { $match: { $expr: { $eq: ['$account', '$$accountId'] } } },
-                { $match: { user: new mongoose.Types.ObjectId(userId) } },
+          { $lookup: {
+            from: 'usersaccounts',
+            let: { accountId: '$_id' },
+            pipeline: [
+              { $match: { $expr: { $eq: ['$account', '$$accountId'] } } },
+              { $lookup: {
+                  from: 'users',
+                  let: { userId: '$user' },
+                  pipeline: [
+                    { $match: { $expr: { $eq: ['$_id', '$$userId'] } } },
+                    { $project: { _id: 0, name: 1, email: 1 } }
+                  ],
+                  as: 'userDetails'
+                }},
+              { $unwind: '$userDetails' },
+            ],
+            as: 'userAccounts'
+          }},
+          { $project: {
+            _id: 1,
+            name: 1,
+            balance: 1,
+            currency: 1,
+            userAccount: {
+              $arrayElemAt: [
                 {
-                  $lookup: {
-                    from: 'users',
-                    localField: 'user',
-                    foreignField: '_id',
-                    as: 'userDetails'
+                  $filter: {
+                    input: '$userAccounts',
+                    as: 'userAccount',
+                    cond: { $eq: ['$$userAccount.user', new mongoose.Types.ObjectId(userId)] }
                   }
                 },
-                { $unwind: '$userDetails' }
-              ],
-              as: 'userAccounts'
-            }
-          },
-          { $unwind: '$userAccounts' },
-          {
-            $group: {
-              _id: '$_id',
-              name: { $first: '$name' },
-              balance: { $first: '$balance' },
-              currency: { $first: '$currency' },
-              createdAt: { $first: '$userAccounts.createdAt' },
-              users: {
-                $push: {
-                  name: '$userAccounts.userDetails.name',
-                  email: '$userAccounts.userDetails.email',
-                  role: '$userAccounts.role'
+                0
+              ]
+            },
+            users: {
+              $map: {
+                input: '$userAccounts',
+                as: 'userAccount',
+                in: {
+                  name: '$$userAccount.userDetails.name',
+                  email: '$$userAccount.userDetails.email',
+                  role: '$$userAccount.role',
                 }
               }
             }
-          },
-          { $project: { createdAt: 1, name: 1, balance: 1, currency: 1, users: 1} },
+          }},
+          { $match: {'userAccount': { $ne: null }} },
+          { $project: {
+            _id: 1,
+            name: 1,
+            balance: 1,
+            currency: 1,
+            createdAt: '$userAccount.createdAt',
+            users: 1
+          }},
           { $sort: { createdAt: 1 } }
         ]),
         UserModel.findById(userId).select('favoriteAccount')
       ]);
+
       const userFavoriteId = user?.favoriteAccount?.toString() ?? null;
+
 
       return {
         favoriteAccountId: userFavoriteId,
@@ -129,9 +149,9 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
         {
           $lookup: {
             from: 'usersaccounts',
-            let: { accountId: '$_id', userId: new mongoose.Types.ObjectId(userId) },
+            let: { accountId: '$_id' },
             pipeline: [
-              { $match: { $expr: { $and: [{ $eq: ['$account', '$$accountId'] }, { $eq: ['$user', '$$userId'] }] } } },
+              { $match: { $expr: { $eq: ['$account', '$$accountId'] } } },
               {
                 $lookup: {
                   from: 'users',
@@ -161,10 +181,20 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
                 email: '$userAccounts.userDetails.email',
                 role: '$userAccounts.role'
               }
-            }
+            },
+            userIds: { $addToSet: '$userAccounts.user' }
           }
         },
-        { $project: { transactions: 0 } }
+        { $match: {userIds: new mongoose.Types.ObjectId(userId)} },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            balance: 1,
+            currency: 1,
+            users: 1
+          }
+        }
       ]);
   
       if (!account.length) throw CustomError.notFound('Account not found');

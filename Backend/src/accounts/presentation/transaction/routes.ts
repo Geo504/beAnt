@@ -15,6 +15,7 @@ export class TransactionRoutes {
 
     const controller = new TransactionController(transactionRepository);
 
+    
     router.post('/', controller.createTransaction);
     router.get('/', controller.getAllTransactions);
     router.get('/:transactionId', controller.getTransactionById);

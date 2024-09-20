@@ -4,6 +4,7 @@ import { AuthMiddleware } from "../../auth/presentation/middlewares/auth.middlew
 import { AccountDatasourceImpl, AccountRepositoryImpl } from "../infrastructure";
 import { AccountController } from "./controller";
 import { TransactionRoutes } from "./transaction/routes";
+import { InvitationRoutes } from "./invitation/routes";
 
 
 
@@ -18,7 +19,6 @@ export class AccountRoutes {
 
     const controller = new AccountController(accountRepository);
 
-    router.use('/transactions', AuthMiddleware.validateJWT, TransactionRoutes.routes)
     
     router.post('/', AuthMiddleware.validateJWT, controller.createAccount);
     router.get('/', AuthMiddleware.validateJWT, controller.getAllAccounts);
@@ -26,7 +26,10 @@ export class AccountRoutes {
     router.put('/:id', AuthMiddleware.validateJWT, controller.updateAccount);
     router.delete('/:id', AuthMiddleware.validateJWT, controller.deleteAccount);
     router.put('/favorite/:id', AuthMiddleware.validateJWT, controller.updateFavoriteAccount);
+    
+    router.use('/transactions', AuthMiddleware.validateJWT, TransactionRoutes.routes)
 
+    router.use('/invitations', AuthMiddleware.validateJWT, InvitationRoutes.routes)
 
     
     return router;
