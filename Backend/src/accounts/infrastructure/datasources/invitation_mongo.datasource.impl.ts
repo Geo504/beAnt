@@ -1,7 +1,7 @@
 import { AccountModel, InvitationsAccountModel, UserModel, UsersAccountsModel } from "../../../data";
 
 import { CustomError } from "../../../auth/domain";
-import { CreateInvitationDto, InvitationDataSource, InvitationEntity } from "../../domain";
+import { CreateInvitationDto, DeleteInvitationDto, InvitationDataSource, InvitationEntity } from "../../domain";
 import { UpdateInvitationDto } from "../../domain/dtos/invitation/update_invitation.dto";
 
 
@@ -118,6 +118,28 @@ export class InvitationMongoDataSourceImpl implements InvitationDataSource {
         InvitationsAccountModel.deleteOne({ _id: invitationId })
       ]);
 
+
+      return true;
+
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      console.log(error);
+      throw CustomError.internalServer();
+    }
+  }
+
+
+
+  async deleteInvitation(deleteInvitationDto: DeleteInvitationDto, userId: string): Promise<boolean> {
+    const { invitationId } = deleteInvitationDto;
+    
+    try {
+      const invitation = await InvitationsAccountModel.findOne({ _id: invitationId, sender: userId });
+      if (!invitation) throw CustomError.notFound('Invitation not found');
+
+      await InvitationsAccountModel.deleteOne({ _id: invitationId });
 
       return true;
 

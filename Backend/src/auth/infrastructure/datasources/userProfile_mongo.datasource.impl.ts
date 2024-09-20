@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import {  AccountModel, InvitationsAccountModel, TransactionModel, UserModel, UserProfileModel, UsersAccountsModel } from "../../../data";
+import { AccountModel, InvitationsAccountModel, TransactionModel, UserModel, UserProfileModel, UsersAccountsModel } from "../../../data";
 
 import { CustomError, ProfileEntity, UpdateUserDto, UserEntity, UserProfileDataSource } from "../../domain";
 

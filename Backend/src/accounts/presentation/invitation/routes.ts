@@ -19,6 +19,7 @@ export class InvitationRoutes {
     router.get('/received', controller.getInvitationsReceived);
     router.get('/sent', controller.getInvitationsSent);
     router.put('/id/:invitationId', controller.updateInvitation);
+    router.delete('/id/:invitationId', controller.deleteInvitation);
 
 
     

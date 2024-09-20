@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { CreateInvitation, CreateInvitationDto, GetInvitationsReceived, InvitationRepository, UpdateInvitation, UpdateInvitationDto } from "../../domain";
+import { CreateInvitation, CreateInvitationDto, DeleteInvitation, DeleteInvitationDto, GetInvitationsReceived, GetInvitationsSent, InvitationRepository, UpdateInvitation, UpdateInvitationDto } from "../../domain";
 import { CustomError } from "../../../auth/domain";
 
 
@@ -47,7 +47,7 @@ export class InvitationController {
   getInvitationsSent = (req: Request, res: Response) => {
     const userId = req.user!;
 
-    return new GetInvitationsReceived(this.invitationRepository)
+    return new GetInvitationsSent(this.invitationRepository)
       .execute(userId)
       .then((data) => res.json(data))
       .catch((error) => this.handleError(error, res));
@@ -65,7 +65,22 @@ export class InvitationController {
 
     return new UpdateInvitation(this.invitationRepository)
       .execute(updateInvitationDto!, userId)
-      .then((data) => res.json(data))
+      .then(() => res.status(204).send())
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+
+  deleteInvitation = (req: Request, res: Response) => {
+    const userId = req.user!;
+    const { invitationId } = req.params;
+
+    const [error, deleteInvitationDto] = DeleteInvitationDto.create({invitationId});
+    if (error) return res.status(400).json({ error });
+
+    return new DeleteInvitation(this.invitationRepository)
+      .execute(deleteInvitationDto!, userId)
+      .then(() => res.status(204).send())
       .catch((error) => this.handleError(error, res));
   }
 

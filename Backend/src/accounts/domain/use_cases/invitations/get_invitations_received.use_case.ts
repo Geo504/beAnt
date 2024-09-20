@@ -7,7 +7,6 @@ import { InvitationRepository } from "../../repositories/invitation.repository";
 interface Invitation {
   id: string;
   sender: UserEntity;
-  guest: UserEntity;
   account: AccountEntity;
   role: 'admin' | 'guest';
   createdAt: Date;
@@ -27,6 +26,11 @@ export class GetInvitationsReceived implements GetInvitationsReceivedUseCase {
   async execute(userId: string): Promise<Invitation[]> {
     const invitations = await this.invitationRepository.getInvitationsReceived(userId);
 
-    return invitations;
+    const filteredInvitations = invitations.map(invitation => {
+      const { guest, ...rest } = invitation;
+      return rest;
+    });
+
+    return filteredInvitations;
   }
 }

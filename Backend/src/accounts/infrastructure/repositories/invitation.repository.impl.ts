@@ -1,4 +1,4 @@
-import { CreateInvitationDto, InvitationDataSource, InvitationEntity, InvitationRepository, UpdateInvitationDto } from "../../domain";
+import { CreateInvitationDto, DeleteInvitationDto, InvitationDataSource, InvitationEntity, InvitationRepository, UpdateInvitationDto } from "../../domain";
 
 
 
@@ -22,6 +22,10 @@ export class InvitationRepositoryImpl implements InvitationRepository {
 
   async updateInvitation(updateInvitationDto: UpdateInvitationDto, userId: string): Promise<boolean> {
     return this.invitationDataSource.updateInvitation(updateInvitationDto, userId);
+  }
+
+  async deleteInvitation(deleteInvitationDto: DeleteInvitationDto, userId: string): Promise<boolean> {
+    return this.invitationDataSource.deleteInvitation(deleteInvitationDto, userId);
   }
 
 }

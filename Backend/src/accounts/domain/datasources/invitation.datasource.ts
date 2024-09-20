@@ -1,5 +1,4 @@
-import { CreateInvitationDto } from "../dtos/invitation/create_invitation.dto";
-import { UpdateInvitationDto } from "../dtos/invitation/update_invitation.dto";
+import {CreateInvitationDto, UpdateInvitationDto, DeleteInvitationDto } from "../../domain";
 
 import { InvitationEntity } from "../entities/invitation.entities";
 
@@ -13,4 +12,6 @@ export abstract class InvitationDataSource {
   abstract getInvitationsSent(userId: string): Promise<InvitationEntity[]>;
 
   abstract updateInvitation(updateInvitationDto: UpdateInvitationDto, userId: string): Promise<boolean>;
+
+  abstract deleteInvitation(deleteInvitationDto: DeleteInvitationDto, userId: string): Promise<boolean>;
 }
