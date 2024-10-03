@@ -10,6 +10,7 @@ import UpdateAccountForm from "./main/form/updateAccountForm";
 import InviteUserForm from "./main/form/inviteUserForm";
 import AddTransactionForm from "@/src/app/user/accounts/transactions/components/form/addTransactionForm";
 import Modal from "@/src/components/ui/modal";
+import UsersAccount from "./main/usersAccount/usersAccount";
 
 
 
@@ -34,11 +35,14 @@ export default function AccountModal({ accountData, updateAccount, deleteAccount
     switch (modalData.action) {
       case "edit":
         return (
+          <>
           <UpdateAccountForm 
             accountData={accountData} 
             updateAccount={updateAccount} 
             setIsOpen={setIsOpen}
           />
+          <UsersAccount usersAccount={accountData.users} />
+          </>
         );
       case "addTransaction":
         return (

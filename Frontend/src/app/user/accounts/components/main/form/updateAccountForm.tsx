@@ -66,6 +66,7 @@ export default function UpdateAccountForm({ accountData, updateAccount, setIsOpe
 
 
   return (
+    <>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
 
@@ -114,5 +115,6 @@ export default function UpdateAccountForm({ accountData, updateAccount, setIsOpe
 
       </form>
     </Form>
+    </>
   )
 }

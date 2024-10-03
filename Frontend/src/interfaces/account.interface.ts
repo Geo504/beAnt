@@ -8,6 +8,7 @@ interface UserSubset {
   id: string;
   name: string;
   img?: string;
+  email?: string;
 }
 
 
@@ -34,5 +35,5 @@ export interface Transaction {
   account: AccountSubset;
   date: Date;
   status: "paid" | "pending" | "canceled";
-  userId: UserSubset;
+  user: UserSubset;
 }

@@ -33,10 +33,11 @@ const accountSchema = new Schema({
 });
 
 accountSchema.set('toJSON', {
-  // virtuals: true,
+  virtuals: true,
   versionKey: false,
   transform: function( _doc, ret, _options ) {
     delete ret._id;
+    if (ret.id === null) delete ret.id;
   },
 });
 

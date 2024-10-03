@@ -46,15 +46,15 @@ export default function SideBar() {
     <>
     {sidebarOpen && (
       <div 
-        className="fixed md:hidden top-0 left-0 w-screen h-screen z-10 bg-primarySoft/30 backdrop-blur-sm"
+        className="fixed lg:hidden top-0 left-0 w-screen h-screen z-10 bg-primarySoft/30 backdrop-blur-sm"
         onClick={ setSidebarOpen }
       />
     )}
     
 
-    <aside className={`z-20 fixed md:relative top-4 md:top-0 bottom-4 md:bottom-0 p-2 min-w-60 bg-secondary rounded md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-[107%]'} transition-transform duration-300`}>
+    <aside className={`z-20 fixed lg:relative top-4 lg:top-0 bottom-4 lg:bottom-0 p-2 min-w-60 bg-secondary rounded lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-[107%]'} transition-transform duration-300`}>
 
-      <header className="flex justify-between mb-2 text-primary md:hidden">
+      <header className="flex justify-between mb-2 text-primary lg:hidden">
         <h2 className={`${lifeSavers.className} text-xl`}>BeAnt</h2>
 
         <button onClick={setSidebarOpen}>

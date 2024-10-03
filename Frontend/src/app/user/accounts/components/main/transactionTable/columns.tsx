@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { transactionModalConfig, useTransactionModalStore } from "@/src/store/transactionModal";
+import { useNavbarStore } from "@/src/store/navbar";
 import { Transaction } from "@/src/interfaces"
 
 import { Category, categoryIcons } from "@/src/app/user/accounts/transactions/utils/transactionCategory";
@@ -10,7 +11,30 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { EditPencilSvg, OptionHorizontalSvg, TrashSvg } from "@/src/components/icons";
 
 
+
+
 export const columns: ColumnDef<Transaction>[] = [
+  {
+    accessorKey: "user",
+    header: "Sent By",
+    cell: ({ row }) => {
+      const sender: any = row.getValue("user");
+
+      return (
+        <div className="flex gap-1">
+          <img
+            src={sender.img || "https://beant.s3.eu-west-3.amazonaws.com/web_images/default_avatar.jpg"}
+            alt={sender.name}
+            className="hidden sm:block w-8 h-8 rounded-full"
+          />
+          <div className="flex flex-col text-xs truncate">
+            <p className="truncate">{sender.name}</p>
+            <p className="text-muted-foreground truncate">{sender.email}</p>
+          </div>
+        </div>
+      );
+    }
+  },
   {
     accessorKey: "date",
     header: "Date",
@@ -80,11 +104,14 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const transaction = row.original;
       const { handleOpenModal } = useTransactionModalStore();
+      const { userData } = useNavbarStore();
+
+      const isOwner = userData?.email === row.original.user.email;
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"ghost"} className="h-7 w-7 p-0">
+            <Button variant={"ghost"} className="h-7 w-7 p-0" disabled={!isOwner}>
               <OptionHorizontalSvg size={20}/>
             </Button>
           </DropdownMenuTrigger>

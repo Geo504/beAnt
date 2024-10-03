@@ -86,4 +86,23 @@
   .no-arrows[type=number] {
     -moz-appearance: textfield;
   }
+
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #e4e9ec;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #203a4b94;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #203a4be7;
+  }
+
+
+
 }

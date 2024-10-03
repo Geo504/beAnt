@@ -8,8 +8,8 @@ export default async function ProfileSetup() {
   const profileData = await getUserProfile();
 
   return (
-    <div className="col-span-4 xl:col-span-3 flex flex-col lg:flex-row gap-2 lg:gap-6 p-4 bg-secondary rounded min-h-60 text-primary">
-      <section className="flex flex-col justify-center items-center lg:border-r-2 lg:pr-6">
+    <div className="col-span-8 2xl:col-span-6 flex flex-col md:flex-row gap-2 md:gap-6 p-4 bg-secondary rounded min-h-60 text-primary">
+      <section className="flex flex-col justify-center items-center md:border-r-2 md:pr-6">
         <ProfilePic profileData={profileData}/>
       </section>
 

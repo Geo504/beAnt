@@ -14,8 +14,8 @@ export class TransactionEntity {
     public type: 'Income' | 'Expense',
     public category: string,
     public status: 'Pending' | 'Send' | 'Paid' | 'Rejected',
-    public user: UserEntity["id"],
-    public account: AccountEntity["id"],
+    public user: UserEntity,
+    public account: AccountEntity,
   ) {}
 
   static fromObject(object: { [key: string]: any }) {

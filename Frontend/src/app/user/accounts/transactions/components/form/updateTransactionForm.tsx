@@ -106,13 +106,13 @@ export default function UpdateTransactionForm({ allAccounts, setIsOpen, updateTr
     try {
       const success = await updateTransaction(formattedValues, transaction?.id || "");
       if (!success) {
-        return toast.error("Error creating transaction. Please try again.");
+        return toast.error("Error updating transaction. Please try again.");
       }
       setIsOpen(false);
-      toast.success("Transaction created successfully.");
+      toast.success("Transaction updated successfully.");
       
     } catch (error) {
-      toast.error("Error creating transaction. Please try again.");
+      toast.error("Error updating transaction. Please try again.");
     }
   }
 

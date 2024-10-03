@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { transactionModalConfig, useTransactionModalStore } from "@/src/store/transactionModal";
+import { useNavbarStore } from "@/src/store/navbar";
 import { Transaction } from "@/src/interfaces"
 
 import { Category, categoryIcons } from "@/src/app/user/accounts/transactions/utils/transactionCategory";
@@ -88,11 +89,14 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const transaction = row.original;
       const { handleOpenModal } = useTransactionModalStore();
+      const { userData } = useNavbarStore();
+
+      const isOwner = userData?.email === row.original.user.email;
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"ghost"} className="h-7 w-7 p-0">
+            <Button variant={"ghost"} className="h-7 w-7 p-0" disabled={!isOwner}>
               <OptionHorizontalSvg size={20}/>
             </Button>
           </DropdownMenuTrigger>

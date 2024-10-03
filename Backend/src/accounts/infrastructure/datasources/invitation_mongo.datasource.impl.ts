@@ -20,14 +20,14 @@ export class InvitationMongoDataSourceImpl implements InvitationDataSource {
         UsersAccountsModel.exists({ user: userId, account: accountId, role: 'admin' })
       ]);
       if (!userGuest) throw CustomError.notFound('Guest not found');
-      if (!account) throw CustomError.notFound('Account not found or unauthorized');
+      if (!account) throw CustomError.forbidden('Unauthorized');
 
       const [existingInvitation, existingUserAccount] = await Promise.all([
         InvitationsAccountModel.exists({ guest: userGuest._id, account: accountId }),
         UsersAccountsModel.exists({ user: userGuest._id, account: accountId })
       ]);
-      if (existingInvitation) throw CustomError.forbidden('Invitation already exists');
-      if (existingUserAccount) throw CustomError.forbidden('User already belongs to the account');
+      if (existingInvitation) throw CustomError.badRequest('Invitation already sent');
+      if (existingUserAccount) throw CustomError.badRequest('User already belongs to the account');
 
       const newInvitation = new InvitationsAccountModel({
         sender: userId,

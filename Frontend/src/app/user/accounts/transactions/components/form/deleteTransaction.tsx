@@ -19,10 +19,11 @@ export default function DeleteTransaction({transaction, deleteTransaction, setIs
   const handleDelete = async() => {
     try {
       const success = await deleteTransaction(transaction?.id || "");
-      if (success) {
-        setIsOpen(false);
-        toast("Transaction deleted successfully.");
+      if (!success) {
+        return toast.error("Error deleting transaction. Please try again.");
       }
+      setIsOpen(false);
+      toast("Transaction deleted successfully.");
     } catch (error) {
       toast.error("Error deleting transaction. Please try again.");
     }

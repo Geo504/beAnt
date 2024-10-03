@@ -1,10 +1,9 @@
-// import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-// import { UpdateAccountResponse } from "@/src/services/accountData";
+import { sendInvitation } from "@/src/services/invitationsAccount";
 import { Account } from "@/src/interfaces";
 
 import { Button } from "@/src/components/ui/button";
@@ -22,34 +21,39 @@ interface Props {
 }
 
 const formSchema = z.object({
-  guestEmail: z.string().email(),
+  guest: z.string().email(),
   accountId: z.string().min(10),
+  role: z.string().min(1),
 })
 
 
 
 export default function InviteUserForm({ allAccounts, currentAccount, setIsOpen }: Props) {
 
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      guestEmail: "",
+      guest: "",
       accountId: currentAccount?.id,
+      role: "guest",
     },
   })
 
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     try {
-      // const success = await updateAccount(accountData.id, values);
-      // if (!success) {
-      //   return toast.error("Error updating account. Please try again.");
-      // }
+      const [ error, success] = await sendInvitation(values);
+      if (error) {
+        return toast.warning(
+          error.errorMessage,
+          error.errorDescription ? { description: error.errorDescription } : undefined
+        );
+      }
+      if (success) {
+        toast.success("Invitation successfully sent!");
+      }
       setIsOpen(false);
-      toast.success("Invitation send successfully.");
 
     } catch (error) {
       toast.error("Error sending invitation. Please try again.");
@@ -100,7 +104,7 @@ export default function InviteUserForm({ allAccounts, currentAccount, setIsOpen 
 
           <FormField
             control={form.control}
-            name="guestEmail"
+            name="guest"
             render = {({ field }) => (
               <FormItem>
                 <FormLabel>Guest Email</FormLabel>
@@ -119,6 +123,32 @@ export default function InviteUserForm({ allAccounts, currentAccount, setIsOpen 
                 </FormDescription>
                 <FormMessage />
 
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="role"
+            render = {({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="bg-transparent border-muted-foreground">
+                      <SelectValue placeholder="Select a role"/>
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="guest">Guest</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <FormDescription>
+                  Role gives different permissions to users.
+                </FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />

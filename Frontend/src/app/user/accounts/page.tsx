@@ -16,7 +16,6 @@ export default async function AccountsPage({ searchParams }: any) {
   const allAccounts = await getAllAccounts();
   const accountData = await getAccount(searchParams.id);
   
-  
   if (!searchParams.id) {
     redirect(`/user/accounts?id=${allAccounts?.favoriteAccountId}`);
   }
@@ -41,7 +40,7 @@ export default async function AccountsPage({ searchParams }: any) {
             createTransaction={createTransaction}
           />
 
-          <HeaderCurrentAccount accountName={accountData.name} />
+          <HeaderCurrentAccount accountName={accountData.name} users={accountData.users} />
 
           <section className="grid grid-cols-4 gap-4">
             <TransactionTable

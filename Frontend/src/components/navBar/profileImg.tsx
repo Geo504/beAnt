@@ -18,12 +18,17 @@ interface Props {
 }
 
 export default function ProfileImg({user, logoutUser }: Props) {
-  const { profileUrlImage, setProfileUrlImage } = useNavbarStore();
+  const { profileUrlImage, setProfileUrlImage, setUserData } = useNavbarStore();
   const currentPath = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    if (user.img) setProfileUrlImage(user.img);
+    if (user) {
+      const { id, email, img } = user;
+      
+      setUserData({ id, email });
+      if (img) setProfileUrlImage(img);
+    }
   }, []);
 
   const firstLetter = user.name.charAt(0).toUpperCase();

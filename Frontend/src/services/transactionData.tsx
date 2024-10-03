@@ -121,7 +121,6 @@ export async function updateTransaction(data: { name: string, value: number, cat
   });
 
   if (!res.ok) {
-    console.log(res);
     return null;
   }
 

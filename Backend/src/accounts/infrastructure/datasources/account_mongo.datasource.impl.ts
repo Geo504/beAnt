@@ -158,7 +158,7 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
                   let: { userId: '$user' },
                   pipeline: [
                     { $match: { $expr: { $eq: ['$_id', '$$userId'] } } },
-                    { $project: { _id: 0, name: 1, email: 1 } }
+                    { $project: { _id: 0, name: 1, email: 1, img:1 } }
                   ],
                   as: 'userDetails'
                 }
@@ -179,6 +179,7 @@ export class AccountDatasourceImpl<T> implements AccountDataSource<T> {
               $push: {
                 name: '$userAccounts.userDetails.name',
                 email: '$userAccounts.userDetails.email',
+                img: '$userAccounts.userDetails.img',
                 role: '$userAccounts.role'
               }
             },
