@@ -5,3 +5,4 @@ export * from './adapter/jwt'
 export * from './validators'
 
 export * from './service/email'
+export * from './service/upload_image'

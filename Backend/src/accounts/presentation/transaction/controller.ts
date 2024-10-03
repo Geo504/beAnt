@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 
-import { CreateTransaction, CreateTransactionDto, GetAllTransactions, GetTransaction, TransactionRepository, UpdateTransaction, UpdateTransactionDto, ValidateTransactionIdDto } from "../../domain";
+import { CreateTransaction, CreateTransactionDto, DeleteTransaction, GetAllQueriesDto, GetAllTransactions, GetTransaction, PaginationDto, TransactionRepository, UpdateTransaction, UpdateTransactionDto, ValidateMongoIdDto } from "../../domain";
 import { CustomError } from "../../../auth/domain";
+
+
 
 export class TransactionController {
   constructor(
@@ -33,9 +35,16 @@ export class TransactionController {
 
   getAllTransactions = async (req: Request, res: Response) => {
     const userId = req.user!;
+    const { page=1, limit=10, search, accountId } = req.query;
+
+    const [error, paginationDto] = PaginationDto.create(+page, +limit);
+    if (error) return res.status(400).json({ error });
+
+    const [errorQuery, getAllQueriesDto] = GetAllQueriesDto.create(search?.toString(), accountId?.toString());
+    if (errorQuery) return res.status(400).json({ errorQuery });
 
     return new GetAllTransactions(this.transactionRepository)
-      .execute(userId)
+      .execute(paginationDto!, userId, getAllQueriesDto)
       .then((data) => res.json(data))
       .catch((error) => this.handleError(error, res));
   }
@@ -46,11 +55,11 @@ export class TransactionController {
     const userId = req.user!;
     const transactionId = req.params.transactionId;
 
-    const [error, validateTransactionIdDto] = ValidateTransactionIdDto.create(transactionId);
+    const [error, validateMongoIdDto] = ValidateMongoIdDto.create(transactionId);
     if (error) return res.status(400).json({ error });
 
     return new GetTransaction(this.transactionRepository)
-      .execute(validateTransactionIdDto!.transactionId, userId)
+      .execute(validateMongoIdDto!.mongoId, userId)
       .then((data) => res.json(data))
       .catch((error) => this.handleError(error, res));
   }
@@ -67,6 +76,21 @@ export class TransactionController {
     return new UpdateTransaction(this.transactionRepository)
       .execute(updateTransactionDto!, userId)
       .then((data) => res.json(data))
+      .catch((error) => this.handleError(error, res));
+  }
+
+
+
+  deleteTransaction = async (req: Request, res: Response) => {
+    const userId = req.user!;
+    const transactionId = req.params.transactionId;
+
+    const [error, validateMongoIdDto] = ValidateMongoIdDto.create(transactionId);
+    if (error) return res.status(400).json({ error });
+
+    return new DeleteTransaction(this.transactionRepository)
+      .execute(validateMongoIdDto!.mongoId, userId)
+      .then(() => res.status(204).send())
       .catch((error) => this.handleError(error, res));
   }
 }

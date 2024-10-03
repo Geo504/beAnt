@@ -22,10 +22,14 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 
   accounts: [{
     type: Schema.Types.ObjectId,
-    ref: 'Account'
+    ref: 'UsersAccount',
   }],
   favoriteAccount: {
     type: Schema.Types.ObjectId,
@@ -34,7 +38,7 @@ const userSchema = new Schema({
 });
 
 userSchema.set('toJSON', {
-  virtuals: true,
+  // virtuals: false,
   versionKey: false,
   transform: function( _doc, ret, _options ) {
     delete ret._id;

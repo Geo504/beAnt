@@ -22,7 +22,7 @@ export class AccountEntity {
   ) {}
 
   static fromObject( object: { [key: string]: any }) {
-    const { id, _id, name, balance, currency, users, transactions } = object;
+    const { id, _id, name, balance, currency, users } = object;
 
     if (!id && !_id) throw CustomError.badRequest('Id is required');
     if (!name) throw CustomError.badRequest('Name is required');
@@ -30,6 +30,6 @@ export class AccountEntity {
     if (!currency) throw CustomError.badRequest('Currency is required');
     if (!users) throw CustomError.badRequest('User is required');
 
-    return new AccountEntity(id || _id, name, balance, currency, users, transactions);
+    return new AccountEntity(id || _id, name, balance, currency, users);
   }
 }

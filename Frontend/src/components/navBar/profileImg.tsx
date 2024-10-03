@@ -1,7 +1,8 @@
 "use client"
-
+import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { useNavbarStore } from "@/src/store/navbar";
 import LogoutButton from "./logout-btn";
 import { User } from "@/src/interfaces";
 
@@ -12,17 +13,26 @@ import { GearSvg, ProfileSvg } from "../icons";
 
 
 interface Props {
-  user: User | null; 
+  user: User; 
   logoutUser: () => Promise<boolean>;
 }
 
 export default function ProfileImg({user, logoutUser }: Props) {
-
+  const { profileUrlImage, setProfileUrlImage, setUserData } = useNavbarStore();
   const currentPath = usePathname();
   const router = useRouter();
-  
-  const firstLetter = user ? user.name.charAt(0).toUpperCase() : 'BA';
-  
+
+  useEffect(() => {
+    if (user) {
+      const { id, email, img } = user;
+      
+      setUserData({ id, email });
+      if (img) setProfileUrlImage(img);
+    }
+  }, []);
+
+  const firstLetter = user.name.charAt(0).toUpperCase();
+
 
 
   return (
@@ -30,9 +40,9 @@ export default function ProfileImg({user, logoutUser }: Props) {
     <DropdownMenu>
 
       <DropdownMenuTrigger className={`${!currentPath.startsWith('/user') && 'hidden'}`} asChild>
-        <button className="rounded-full" type="button">
+        <button className="rounded-full transition-shadow duration-300 hover:shadow-md hover:bg-secondary dark:hover:shadow-primary/30" type="button">
           <Avatar>
-            <AvatarImage src={ user && user.img ? user.img : '' } alt="profile pic"/>
+            <AvatarImage src={ profileUrlImage } alt="profile pic"/>
             <AvatarFallback>{firstLetter}</AvatarFallback>
           </Avatar>
         </button>
@@ -40,7 +50,10 @@ export default function ProfileImg({user, logoutUser }: Props) {
 
 
       <DropdownMenuContent className="w-44 mr-4">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel className="flex flex-col">
+          My User
+          <span className="text-xs text-muted-foreground font-normal">{user?.email}</span>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>

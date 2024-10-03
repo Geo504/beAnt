@@ -1,6 +1,10 @@
 import { UpdateTransactionDto } from "../../dtos/transaction/update_transaction.dto";
 import { TransactionRepository } from "../../repositories/transaction.repository";
 
+import { UserEntity } from "../../../../auth/domain";
+import { AccountEntity } from "../../entities/account.entities";
+
+
 
 interface TransactionUpdate {
   transactionId: string;
@@ -10,8 +14,8 @@ interface TransactionUpdate {
   type: 'Income' | 'Expense';
   category: string;
   status: 'Pending' | 'Send' | 'Paid' | 'Rejected';
-  userId: string;
-  accountId: string;
+  userId: UserEntity;
+  accountId: AccountEntity;
 }
 
 interface UpdateTransactionUseCase {

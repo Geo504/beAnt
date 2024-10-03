@@ -1,6 +1,8 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { useNavbarStore } from "@/src/store/navbar";
+
 import { DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut } from "../ui/dropdown-menu";
 import { LogOutSvg } from "../icons";
 
@@ -12,15 +14,24 @@ interface Props {
 
 export default function LogoutButton({ logoutUser }: Props) {
   const router = useRouter();
+  const { setUserData, setProfileUrlImage } = useNavbarStore();
+
+
 
   async function handleLogout() {
     try {
       const success = await logoutUser();
-      if (success) router.push('/login');
+      if (success) {
+        router.push('/login')
+        setUserData(null);
+        setProfileUrlImage('');
+      };
     } catch (error) {
       toast.error("An unexpected error occurred.");
     }
   }
+
+
 
   return (
     <>

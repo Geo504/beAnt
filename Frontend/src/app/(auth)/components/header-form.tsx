@@ -32,11 +32,11 @@ export default function HeaderForm({variant="login"}) {
     </h3>
 
     <div className="flex flex-col sm:flex-row gap-4 mb-4 justify-between">
-      <Button variant={"secondary"} className="text-xs px-4">
+      <Button variant={"secondary"} className="text-xs px-4 hover:bg-background">
         <GoogleSvg size={20} className="mr-1"/>
         Sign in with Google
       </Button>
-      <Button variant={"secondary"} className="text-xs">
+      <Button variant={"secondary"} className="text-xs hover:bg-background">
         <FacebookSvg size={20} className="mr-1"/>
         Sign in with Facebook
       </Button>

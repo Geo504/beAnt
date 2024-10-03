@@ -22,12 +22,13 @@ export class UpdateTransactionDto {
 
     if (name){
       if (typeof name !== 'string') return ['invalid name'];
-      if (name.length < 3) return ['invalid name'];
+      if (name.length < 2 || name.length > 50) return ['name too short or too long'];
     }
 
 
     if (value) {
       if (isNaN(value) || typeof value !== "number") return ['invalid value'];
+      if (parseFloat(value.toFixed(2)) !== value) return ['invalid value'];
       type = value < 0 ? 'expense' : 'income';
     }
 

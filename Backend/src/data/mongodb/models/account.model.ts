@@ -17,11 +17,14 @@ const accountSchema = new Schema({
     default: '€',
     enum: ['€', '$', '£']
   },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 
   users: [{
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'Users is required']
+    ref: 'UsersAccounts',
   }],
   transactions: [{
     type: Schema.Types.ObjectId,
@@ -34,6 +37,7 @@ accountSchema.set('toJSON', {
   versionKey: false,
   transform: function( _doc, ret, _options ) {
     delete ret._id;
+    if (ret.id === null) delete ret.id;
   },
 });
 

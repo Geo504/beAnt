@@ -23,7 +23,7 @@ export class GetAllAccounts implements GetAllAccountsUseCase {
   async execute(userId: string): Promise<AllAccountResponse> {
     const userAccounts = await this.accountRepository.getAllAccounts(userId);
 
-    const accounts = userAccounts.accounts.map(({ transactions, ...account }) =>{ 
+    const accounts = userAccounts.accounts.map(({ transactions, ...account }) =>{
       return AccountEntity.fromObject(account)
     });
 

@@ -1,6 +1,10 @@
 import { CreateTransactionDto } from "../../dtos/transaction/create_transaction.dto";
 import { TransactionRepository } from "../../repositories/transaction.repository";
 
+import { UserEntity } from "../../../../auth/domain";
+import { AccountEntity } from "../../entities/account.entities";
+
+
 
 interface Transaction {
   id: string;
@@ -10,8 +14,8 @@ interface Transaction {
   type: 'Income' | 'Expense';
   category: string;
   status: 'Pending' | 'Send' | 'Paid' | 'Rejected';
-  userId: string;
-  accountId: string;
+  userId: UserEntity;
+  accountId: AccountEntity;
 }
 
 interface CreateTransactionUseCase {

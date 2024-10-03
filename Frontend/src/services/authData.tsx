@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { jwtDecode } from "jwt-decode";
 
 import { ErrorResponse, User } from "../interfaces";
@@ -8,7 +9,6 @@ import { ErrorResponse, User } from "../interfaces";
 
 
 export type RegisterResponse = {success: true} | ErrorResponse;
-
 export async function registerUser(data: {name: string, email: string, password: string}) : Promise<RegisterResponse> {
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`, {
@@ -34,7 +34,6 @@ export async function registerUser(data: {name: string, email: string, password:
 
 
 export type LoginResponse = {user: User} | ErrorResponse;
-
 export async function loginUser(data: {email: string, password: string}): Promise< LoginResponse > {
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
@@ -95,6 +94,76 @@ export async function getUser(): Promise<User | null> {
 
   if (!res.ok) {
     return null;
+  }
+
+  return res.json();
+}
+
+
+
+export type GetProfileResponse = {
+  user: User;
+  lastName?: string;
+  profession?: string;
+  phone?: string;
+  birth?: Date;
+}
+export async function getUserProfile(): Promise<GetProfileResponse | null> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/profile`, {
+    method: "GET",
+    headers: {Cookie: cookies().toString()},
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+
+  return res.json();
+}
+
+
+
+export type UpdateProfileResponse = {
+  name?: string;
+  lastName?: string;
+  profession?: string;
+  phone?: string;
+  birth?: Date;
+}
+export async function updateUser(data: UpdateProfileResponse): Promise<UpdateProfileResponse | ErrorResponse> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: cookies().toString(),
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    return {errorMessage: 'Error updating. Please try again.'};
+  }
+
+  revalidatePath('/user/profile');
+  return res.json();
+}
+
+
+
+export async function updateProfileImage(data: FormData): Promise<{url: string} | ErrorResponse> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/profile_image`, {
+    method: "POST",
+    headers: {Cookie: cookies().toString()},
+    body: data,
+  });
+
+  
+  if (res.status === 400) {
+    const error = await res.json();
+    return {errorMessage: error.error};
+  }
+  if (!res.ok) {
+    return {errorMessage: 'Error updating image. Please try again.'};
   }
 
   return res.json();

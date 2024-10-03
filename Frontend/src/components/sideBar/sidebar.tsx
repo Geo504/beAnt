@@ -11,21 +11,29 @@ import { AccountsSvg, CloseSvg, HomeSvg, ProfileSvg } from "../icons";
 const menuItems = [
   {
     title: 'Home',
-    subtitle: ['Total Period Income', 'Total Period Expenses', 'Total Balance', 'Monthly Expenses', 'Statistics Accounts', 'Income vs. Expense', 'Payments History', 'Monthly Budgets', 'Transaction History'],
+    subtitle: [
+      {name: 'Total Period Income', path: '/user/home'},
+      {name: 'Total Period Expenses', path: '/user/home'},
+      {name: 'Total Balance', path: '/user/home'},
+      {name: 'Monthly Expenses', path: '/user/home'},
+    ],
     icon: <HomeSvg />,
-    path: '/user/home',
   },
   {
     title: 'Profile',
-    subtitle: ['Total Balance', 'Total Capital'],
+    subtitle: [
+      {name: 'Profile Setup', path: '/user/profile'},
+      {name: 'Total Capital', path: '/user/profile'},
+    ],
     icon: <ProfileSvg />,
-    path: '/user/profile',
   },
   {
     title: 'Accounts',
-    subtitle: ['Accounts', 'Total Period Income', 'Total Period Expenses', 'Total Balance', 'Statistics Accounts'],
+    subtitle: [
+      {name: 'Accounts', path: '/user/accounts'}, 
+      {name: 'Transactions History', path: '/user/accounts/transactions'},
+    ],
     icon: <AccountsSvg />,
-    path: '/user/accounts',
   }
 ]
 
@@ -38,15 +46,15 @@ export default function SideBar() {
     <>
     {sidebarOpen && (
       <div 
-        className="fade-out fixed md:hidden top-0 left-0 w-screen h-screen z-10 bg-primarySoft/30 backdrop-blur-sm"
+        className="fixed lg:hidden top-0 left-0 w-screen h-screen z-10 bg-primarySoft/30 backdrop-blur-sm"
         onClick={ setSidebarOpen }
       />
     )}
     
 
-    <aside className={`z-20 fixed md:relative top-4 md:top-0 bottom-4 md:bottom-0 p-2 min-w-60 bg-secondary rounded md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-[107%]'} transition-transform duration-300`}>
+    <aside className={`z-20 fixed lg:relative top-4 lg:top-0 bottom-4 lg:bottom-0 p-2 min-w-60 bg-secondary rounded lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-[107%]'} transition-transform duration-300`}>
 
-      <header className="flex justify-between mb-2 text-primary md:hidden">
+      <header className="flex justify-between mb-2 text-primary lg:hidden">
         <h2 className={`${lifeSavers.className} text-xl`}>BeAnt</h2>
 
         <button onClick={setSidebarOpen}>
@@ -56,7 +64,7 @@ export default function SideBar() {
       
       <nav className="flex flex-col gap-0.5">
         {menuItems.map( item => (
-          <SidebarMenuItem key={item.path} {...item} />
+          <SidebarMenuItem key={item.title} {...item} />
         ))}
       </nav>
 

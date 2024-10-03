@@ -1,5 +1,4 @@
 "use client";
-
 import { usePathname } from "next/navigation";
 
 import { useSidebarStore } from "@/src/store/sidebar";
@@ -14,7 +13,7 @@ export default function MenuButton() {
   const { setSidebarOpen } = useSidebarStore()
 
   return (
-    <Button variant="tertiary" size="icon_sm" className={`mr-1 ${!currentPath.startsWith('/user') && 'hidden'} md:hidden`} onClick={setSidebarOpen}>
+    <Button variant="tertiary" size="icon_sm" className={`mr-1 ${!currentPath.startsWith('/user') && 'hidden'} lg:hidden`} onClick={setSidebarOpen}>
       <MenuSvg />
     </Button>
   )
